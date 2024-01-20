@@ -8,6 +8,7 @@ import java.util.Set;
 
 public enum Printer {
     ADD("добавить новый контакт;", ""),
+    ADD_SUCCESS("Контакт успешно добавлен!\n", ""),
     COMMANDS("Введите команду из списка:", "%10s - %s%n",
              "SHOW", "ADD", "SAVE", "DELETE", "SEARCH", "EXIT"),
     CONTACT_BOOK_BODY("", "%6d : %41s : %14s : %-20s%n"),

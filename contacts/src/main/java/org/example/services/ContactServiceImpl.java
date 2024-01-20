@@ -89,6 +89,7 @@ public class ContactServiceImpl implements ContactService {
                 new Contact(data[0], "+7" + data[1], data[2])
         );
         Printer.SHOW.print(contacts);
+        Printer.ADD_SUCCESS.print();
     }
 
     @Override

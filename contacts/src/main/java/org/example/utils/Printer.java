@@ -18,7 +18,7 @@ public enum Printer {
     DELETE_SUCCESS("Контакт успешно удален!\n", ""),
     EMAIL("введите электронную почту абонента:\n", "[a-z][a-z0-9]+_?-?[a-z0-9]*@[a-z]+.[a-z]+"),
     EMPTY_CONTACT_BOOK_MESSAGE("КНИГА КОНТАКТОВ ПУСТА", "%47s\n"),
-    EMPTY_SEARCH_CONTACT_RESULTS("СПИСОК РЕЗУЛЬТАТОВ ПОИСКА ПУСТ", "%53s\n"),
+    EMPTY_SEARCH_CONTACT_RESULTS_MESSAGE("СПИСОК РЕЗУЛЬТАТОВ ПОИСКА ПУСТ", "%53s\n"),
     EXIT("выйти из книги контактов;", ""),
     INPUT_CONTACT_ID("введите порядковый номер контакта в книге", ""),
     LINE("_", "88"),
@@ -37,46 +37,37 @@ public enum Printer {
 
 
     @Getter
-    private final String value;
+    private final String message;
     private final String format;
     private final String[] commands;
 
-    Printer(String value, String format, String... strings) {
-
-        this.value = value;
+    Printer(String message, String format, String... strings) {
+        this.message = message;
         this.format = format;
         this.commands = strings;
     }
 
     public void print(Object... objects) {
-
         switch (this) {
-
             case COMMANDS -> {
-
-                System.out.println(value);
-
+                System.out.println(message);
                 for (String command : commands) {
 
                     System.out.printf(
                             format,
                             command,
-                            Printer.valueOf(command).value
+                            Printer.valueOf(command).message
                     );
                 }
                 System.out.println();
             }
 
             case SHOW, SHOW_SEARCH_RESULT -> {
-
                 LINE.print();
                 CONTACT_BOOK_TITLE.print();
                 LINE.print();
-
                 Set<Contact> contacts = (Set<Contact>) objects[0];
-
                 int count = 0;
-
                 for (Contact contact : contacts) {
                     count++;
                     contact.setNumInOrder(count);
@@ -90,31 +81,26 @@ public enum Printer {
                     LINE.print();
                 }
                 if (contacts.isEmpty()) {
-                    printEmpty();
+                    printEmptyMessage();
                     LINE.print();
                 }
                 System.out.println();
             }
-
-            case LINE -> System.out.println(value.repeat(Integer.parseInt(format)));
-
-            case EMPTY_CONTACT_BOOK_MESSAGE, EMPTY_SEARCH_CONTACT_RESULTS ->
-                    System.out.printf(format, value);
-
-            default -> System.out.println(value);
+            case LINE -> System.out.println(message.repeat(Integer.parseInt(format)));
+            case EMPTY_CONTACT_BOOK_MESSAGE, EMPTY_SEARCH_CONTACT_RESULTS_MESSAGE ->
+                    System.out.printf(format, message);
+            default -> System.out.println(message);
         }
     }
 
-    public String getRedex() {
+    public String getRegex() {
         return format;
     }
 
-    private void printEmpty() {
-
+    private void printEmptyMessage() {
         switch (this) {
-
             case SHOW -> EMPTY_CONTACT_BOOK_MESSAGE.print();
-            case SHOW_SEARCH_RESULT -> EMPTY_SEARCH_CONTACT_RESULTS.print();
+            case SHOW_SEARCH_RESULT -> EMPTY_SEARCH_CONTACT_RESULTS_MESSAGE.print();
         }
     }
 }

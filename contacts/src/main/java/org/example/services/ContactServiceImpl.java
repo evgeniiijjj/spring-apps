@@ -78,7 +78,7 @@ public class ContactServiceImpl implements ContactService {
             if (input.equalsIgnoreCase("EXIT")) {
                 return;
             }
-            if (input.matches(stages[iter].getRedex())) {
+            if (input.matches(stages[iter].getRegex())) {
                 data[iter] = input;
                 iter++;
             } else {
@@ -107,13 +107,13 @@ public class ContactServiceImpl implements ContactService {
                 break;
             }
             Contact pickedContact = null;
-            if (input.matches(Printer.NUMBER.getRedex())) {
+            if (input.matches(Printer.NUMBER.getRegex())) {
                 int numInOrder = Integer.parseInt(input);
                 pickedContact = contacts.stream()
                         .filter(cont -> cont.getNumInOrder().equals(numInOrder))
                         .findFirst().orElse(null);
             }
-            if (input.matches(Printer.EMAIL.getRedex())) {
+            if (input.matches(Printer.EMAIL.getRegex())) {
                 pickedContact = contacts.stream()
                         .filter(cont -> cont.getEmail().equals(input))
                         .findFirst().orElse(null);

@@ -1,11 +1,8 @@
 package com.example.demo.entities;
 
-import lombok.Data;
+import lombok.Getter;
 
-import java.text.MessageFormat;
-
-
-@Data
+@Getter
 public class Student {
     private static int counter;
 
@@ -15,7 +12,6 @@ public class Student {
     private final int age;
 
     public Student(String firstName, String lastName, int age) {
-
         id = ++counter;
         this.firstName = firstName;
         this.lastName = lastName;

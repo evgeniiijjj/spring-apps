@@ -1,0 +1,7 @@
+table {
+    width: 30%;
+    border: 1px solid;
+}
+tbody tr:nth-child(odd) {
+  background-color: #f7f5f5;
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/assets/css/basic.css"/>
+    <title>Contact list</title>
+</head>
+<body>
+<h1>Contact list</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Email</th>
+        <th>Phone</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="contact : ${contacts}">
+        <td th:text="${contact.id}"></td>
+        <td th:text="${contact.firstName}"></td>
+        <td th:text="${contact.lastName}"></td>
+        <td th:text="${contact.email}"></td>
+        <td th:text="${contact.phone}"></td>
+        <th>
+            <a th:href="@{/save/{id}(id=${contact.id})}">Edit</a>
+            <a th:href="@{/delete/{id}(id=${contact.id})}">Delete</a>
+        </th>
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/save/{id}(id=0)}">New contact</a>
+</body>
+</html>

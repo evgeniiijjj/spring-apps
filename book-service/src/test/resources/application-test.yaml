@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    generate-dll: true
+app:
+  redis:
+    enable: true
+  cache:
+    cacheType: redis
+    cache-names:
+      - books
+      - book
+    caches:
+      books:
+        expire: 100s
+      book:
+        expire: 100s

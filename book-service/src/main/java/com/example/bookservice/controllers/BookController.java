@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,12 +34,17 @@ public class BookController {
     }
 
     @PostMapping("api/books/book")
-    public ResponseEntity<BookDto> createOrUpdateBook(@RequestBody @Valid BookDto book) {
-        return ResponseEntity.ok(service.createOrUpdateBook(book));
+    public ResponseEntity<BookDto> createBook(@RequestBody @Valid BookDto book) {
+        return ResponseEntity.ok(service.createBook(book));
+    }
+
+    @PutMapping("api/books/book")
+    public ResponseEntity<BookDto> updateBook(@RequestBody @Valid BookDto book) {
+        return ResponseEntity.ok(service.updateBook(book));
     }
 
     @DeleteMapping("api/books/book/{id}")
     public ResponseEntity<Integer> deleteBookById(@PathVariable Integer id) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(service.deleteById(id));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(service.deleteBook(service.getBookById(id)));
     }
 }

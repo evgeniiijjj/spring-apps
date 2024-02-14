@@ -85,13 +85,13 @@ public class BookControllerTest extends AbstractTest {
 
         String actualResponse = mockMvc.perform(post("/api/books/book")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(new BookDto(null, "Вишневый сад", "А. Чехов", "NOVEL"))))
+                .content(objectMapper.writeValueAsString(new BookDto(null, "Я, робот", "А. Азимов", "SCI_FI"))))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
                 .getContentAsString(StandardCharsets.UTF_8);
 
-        String expectedResponse = objectMapper.writeValueAsString(new BookDto(6, "Вишневый сад", "А. Чехов", "NOVEL"));
+        String expectedResponse = objectMapper.writeValueAsString(new BookDto(6, "Я, робот", "А. Азимов", "SCI_FI"));
         assertTrue(Objects.requireNonNull(redisTemplate.keys("*")).isEmpty());
         assertEquals(6, bookRepository.count());
         assertJsonEquals(expectedResponse, actualResponse);
@@ -133,13 +133,13 @@ public class BookControllerTest extends AbstractTest {
 
         String actualResponse = mockMvc.perform(post("/api/books/book")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(objectMapper.writeValueAsString(new BookDto(5, "Час быка", "И. А. Ефремов", "NOVEL"))))
+                        .content(objectMapper.writeValueAsString(new BookDto(5, "Час быка", "И. А. Ефремов", "SCI_FI"))))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
                 .getContentAsString(StandardCharsets.UTF_8);
 
-        String expectedResponse = objectMapper.writeValueAsString(new BookDto(5, "Час быка", "И. А. Ефремов", "NOVEL"));
+        String expectedResponse = objectMapper.writeValueAsString(new BookDto(5, "Час быка", "И. А. Ефремов", "SCI_FI"));
         assertTrue(Objects.requireNonNull(redisTemplate.keys("*")).isEmpty());
         assertEquals(5, bookRepository.count());
         assertJsonEquals(expectedResponse, actualResponse);

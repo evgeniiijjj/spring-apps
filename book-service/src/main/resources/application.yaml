@@ -8,8 +8,6 @@ spring:
     redis:
       host: localhost
       port: 6379
-  jpa:
-    generate-dll: true
 app:
   redis:
     enable: true

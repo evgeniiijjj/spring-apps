@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface NewsService {
-    List<NewsDto> getAll(Pageable page, Long userId, Long categoryId);
+    List<NewsDto> getAll(Pageable page, String userEmail, Long categoryId);
     NewsDto createOrUpdate(NewsDto newsDto);
     Optional<NewsDto> findById(long id);
     boolean existsById(long id);
-    boolean deleteById(long id);
+    void deleteById(long id);
 }

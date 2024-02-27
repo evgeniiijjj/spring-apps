@@ -13,11 +13,17 @@ public interface CommentMapper {
     @Mapping(target = "news.commentsNum", source = "news.comments", qualifiedBy = CommentsNumMapper.class)
     CommentDto toDto(Comment comment);
     @Mapping(target = "news.category.newsList", ignore = true)
+    @Mapping(target = "news.user.id", ignore = true)
+    @Mapping(target = "news.user.password", ignore = true)
     @Mapping(target = "news.user.newsList", ignore = true)
     @Mapping(target = "news.user.comments", ignore = true)
+    @Mapping(target = "news.user.roles", ignore = true)
     @Mapping(target = "news.comments", ignore = true)
+    @Mapping(target = "user.id", ignore = true)
+    @Mapping(target = "user.password", ignore = true)
     @Mapping(target = "user.newsList", ignore = true)
     @Mapping(target = "user.comments", ignore = true)
+    @Mapping(target = "user.roles", ignore = true)
     Comment toEntity(CommentDto commentDto);
     List<CommentDto> toDtoList(List<Comment> commentList);
     @CommentsNumMapper

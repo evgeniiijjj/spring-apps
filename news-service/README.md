@@ -13,13 +13,11 @@
             [
         
                 {
-                    "id": 1,
                     "firstName": "firstName",
                     "lastName": "lastName",
                     "email": "email"
                 },
                 {
-                    "id": 2,
                     "firstName": "firstName",
                     "lastName": "lastName",
                     "email": "email"
@@ -30,15 +28,13 @@
       Создание пользователя:
 
         {
-          "id": null,
           "firstName": "firstName",
           "lastName": "lastName",
           "email": "email"
         }
-      Редактирование пользователя с id: 4:
+      Редактирование пользователя с email: email:
 
         {
-          "id": 4,
           "firstName": "firstName",
           "lastName": "lastName",
           "email": "email"
@@ -47,7 +43,6 @@
       Формат ответа в случае успеха:
 
         {
-          "id": 4,
           "firstName": "firstName",
           "lastName": "lastName",
           "email": "email"
@@ -58,15 +53,15 @@
         Имя пользователя должно быть указано!
         Фамилия пользователя должно быть указано!
         Электронная почта пользователя должна быть указана!
-- Удаление пользователя по ID - DELETE/api/users/user/{id};
+- Удаление пользователя по email - DELETE/api/users/user/{email};
 
       Формат ответа в случае успеха:
 
-        id: 10
+        Пользователь с email: email успешно удален!
         
       Формат ответа в случае ошибки:
 
-        Пользователя с id: 10 не существует!
+        Пользователь с email: email не найден!
 - Получение списка всех категорий новостей - GET/api/categories?pageNumber=0&pageSize=10;
 
         Формат ответа:

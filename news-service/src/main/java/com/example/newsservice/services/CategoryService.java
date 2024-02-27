@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface CategoryService {
     List<CategoryDto> getAll(Pageable page);
+    CategoryDto getById(long id);
     CategoryDto createOrUpdate(CategoryDto categoryDto);
     boolean existsById(long id);
-    boolean deleteById(long id);
+    void deleteById(long id);
 }

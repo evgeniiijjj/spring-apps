@@ -29,8 +29,8 @@ public class Validator implements ConstraintValidator<Exists, Object> {
         }
         if (className.endsWith("UserDto")) {
             UserDto user = (UserDto) value;
-            Long id = user.getId();
-            return id != null && userService.existsById(id);
+            String email = user.getEmail();
+            return userService.existsByEmail(email);
         }
         if (className.endsWith("CategoryDto")) {
             CategoryDto category = (CategoryDto) value;

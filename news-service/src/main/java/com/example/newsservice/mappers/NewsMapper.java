@@ -15,8 +15,11 @@ public interface NewsMapper {
     NewsDto toDto(News news);
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "category.newsList", ignore = true)
+    @Mapping(target = "user.id", ignore = true)
+    @Mapping(target = "user.password", ignore = true)
     @Mapping(target = "user.newsList", ignore = true)
     @Mapping(target = "user.comments", ignore = true)
+    @Mapping(target = "user.roles", ignore = true)
     News toEntity(NewsDto newsDto);
     List<NewsDto> toDtoList(List<News> newsList);
     @CommentsNumMapper

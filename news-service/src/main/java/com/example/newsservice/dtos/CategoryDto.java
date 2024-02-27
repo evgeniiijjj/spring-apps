@@ -1,11 +1,13 @@
 package com.example.newsservice.dtos;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CategoryDto {
     private Long id;
     @NotBlank(message = "Имя категории должно быть указано!")

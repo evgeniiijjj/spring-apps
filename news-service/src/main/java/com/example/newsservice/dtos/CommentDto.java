@@ -2,11 +2,13 @@ package com.example.newsservice.dtos;
 
 import com.example.newsservice.validators.Exists;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CommentDto {
     private Long id;
     @NotBlank(message = "Комментарий не должен быть пустым!")

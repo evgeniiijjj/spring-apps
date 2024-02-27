@@ -1,7 +1,6 @@
 package com.example.newsservice.controllers;
 
 import com.example.newsservice.dtos.NewsDto;
-import com.example.newsservice.exceptions.DeleteByIdException;
 import com.example.newsservice.services.NewsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,20 +26,23 @@ public class NewsController {
 
     @GetMapping("api/news")
     private ResponseEntity<List<NewsDto>> getAllNews(@RequestParam int pageNumber, @RequestParam int pageSize,
-                                                                    @RequestParam Long userId, @RequestParam Long categoryId) {
-        return ResponseEntity.ok(service.getAll(PageRequest.of(pageNumber, pageSize), userId, categoryId));
+                                                                    @RequestParam String userEmail, @RequestParam Long categoryId) {
+        return ResponseEntity.ok(service.getAll(PageRequest.of(pageNumber, pageSize), userEmail, categoryId));
     }
 
     @PostMapping("api/news/news")
-    private ResponseEntity<NewsDto> createOrUpdateNews(@RequestBody @Valid NewsDto newsDto) {
+    private ResponseEntity<NewsDto> createNews(@RequestBody @Valid NewsDto newsDto) {
+        return ResponseEntity.ok(service.createOrUpdate(newsDto));
+    }
+
+    @PutMapping("api/news/news")
+    private ResponseEntity<NewsDto> updateNews(@RequestBody @Valid NewsDto newsDto) {
         return ResponseEntity.ok(service.createOrUpdate(newsDto));
     }
 
     @DeleteMapping("api/news/news/{id}")
     private ResponseEntity<Object> deleteNews(@PathVariable long id) {
-        if (service.deleteById(id)) {
-            return ResponseEntity.ok(MessageFormat.format("id: {0}", id));
-        }
-        throw new DeleteByIdException(MessageFormat.format("Новости с id: {0} не существует!", id));
+        service.deleteById(id);
+        return ResponseEntity.ok(MessageFormat.format("id: {0}", id));
     }
 }

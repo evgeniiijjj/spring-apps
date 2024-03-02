@@ -12,7 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Data
 public class UserDto implements Comparable<UserDto> {
-    private String id;
     private String userName;
     private String email;
 

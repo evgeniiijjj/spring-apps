@@ -25,9 +25,9 @@ public class Task {
     private Instant createdAt;
     private Instant updatedAt;
     private TaskStatus status;
-    private String authorId;
-    private String assigneeId;
-    private List<String> observerIds;
+    private String authorEmail;
+    private String assigneeEmail;
+    private List<String> observerEmails;
     @ReadOnlyProperty
     private User author;
     @ReadOnlyProperty
@@ -51,7 +51,7 @@ public class Task {
     }
 
     public Task addObserver(User user) {
-        observerIds.add(user.getId());
+        observerEmails.add(user.getEmail());
         return this;
     }
 }

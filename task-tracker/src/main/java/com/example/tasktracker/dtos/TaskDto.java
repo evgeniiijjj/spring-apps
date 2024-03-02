@@ -1,6 +1,8 @@
 package com.example.tasktracker.dtos;
 
 import com.example.tasktracker.enums.TaskStatus;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -17,12 +19,16 @@ import java.util.List;
 @Data
 public class TaskDto implements Comparable<TaskDto> {
     private String id;
+    @NotBlank(message = "Имя задачи должно быть указано!")
     private String name;
+    @NotBlank(message = "Описание задачи должно быть указано!")
     private String description;
     private Instant createdAt;
     private Instant updatedAt;
     private TaskStatus status;
+    @NotNull(message = "Автор задачи должен быть указан!")
     private UserDto author;
+    @NotNull(message = "Исполнитель задачи должен быть указан!")
     private UserDto assignee;
     private List<UserDto> observers;
 

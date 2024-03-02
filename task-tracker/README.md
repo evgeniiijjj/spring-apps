@@ -12,22 +12,19 @@
 
           [
             {
-              "id": "65d4830816cfe2010b3ea8ec",
               "userName": "Alex",
               "email": "alex@gmail.com"
             },
             {
-              "id": "65d4832216cfe2010b3ea8ed",
               "userName": "John",
               "email": "john@gmail.com"
             }
           ]
-- Получение пользователя по идентификатору - GET/api/users/user/{id};
+- Получение пользователя по email - GET/api/users/user/{email};
 
       Формат ответа:
 
       {
-        "id": "65d4830816cfe2010b3ea8ec",
         "userName": "Alex",
         "email": "alex@gmail.com"
       }
@@ -38,40 +35,57 @@
 - Добавление нового пользователя - POST/api/users/user;
 
         {
-          "id": "65d4847d16cfe2010b3ea8ee",
           "userName": "Eugine",
-          "email": "eugine@gmail.com"
+          "email": "eugine@gmail.com",
+          "password": "eugine"
         }
 
       Формат ответа:
 
         {
-          "id": "65d4847d16cfe2010b3ea8ee",
           "userName": "Eugine",
           "email": "eugine@gmail.com"
         }
 - Редактирование пользователя - PUT/api/users/user;
 
-      Редактирование пользователя с id - 65d4847d16cfe2010b3ea8ee:
+      Редактирование пользователя с email - eugine@gmail.com:
 
         {
-          "id": "65d4847d16cfe2010b3ea8ee",
           "userName": "Eugine",
-          "email": "eug@gmail.com"
+          "email": "eugine@gmail.com"
         }
 
       Формат ответа в случае успеха:
 
         {
-          "id": "65d4847d16cfe2010b3ea8ee",
           "userName": "Eugine",
-          "email": "eug@gmail.com"
+          "email": "eugine@gmail.com"
         }
         
       Формат ответа в случае ошибки:
 
         Возвращает код ответа 404 - не найдено.
-- Удаление пользователя по идентификатору - DELETE/api/users/user/{id};
+- Добавление пользователю роли - PUT/api/users/user/role;
+
+      Добавление пользователю с email - eugine@gmail.com роли "ROLE_MANAGER":
+
+        {
+          "email": "eugine@gmail.com",
+          "role": "ROLE_MANAGER"
+        }
+
+      Формат ответа в случае успеха:
+
+        {
+          "userName": "Eugine",
+          "email": "eugine@gmail.com"
+        }
+        
+      Формат ответа в случае ошибки:
+
+        Возвращает код ответа 404 - не найдено.
+        
+- Удаление пользователя по email - DELETE/api/users/user/{email};
 
       Формат ответа в случае успеха:
 
@@ -93,23 +107,19 @@
                 "updatedAt": "2024-02-20T11:14:38Z",
                 "status": "TODO",
                 "author": {
-                    "id": "65d4830816cfe2010b3ea8ec",
                     "userName": "Alex",
                     "email": "alex@gmail.com"
                 },
                 "assignee": {
-                    "id": "65d4832216cfe2010b3ea8ed",
                     "userName": "John",
                     "email": "john@gmail.com"
                 },
                 "observers": [
                     {
-                        "id": "65d4847d16cfe2010b3ea8ee",
                         "userName": "Eugine",
                         "email": "eug@gmail.com"
                     },
                     {
-                        "id": "65d4897fb03b6c389a355a2e",
                         "userName": "Nick",
                         "email": "nick@gmail.com"
                     }
@@ -123,23 +133,19 @@
                 "updatedAt": "2024-02-20T11:19:02Z",
                 "status": "TODO",
                 "author": {
-                  "id": "65d4830816cfe2010b3ea8ec",
                   "userName": "Alex",
                   "email": "alex@gmail.com"
                 },
                 "assignee": {
-                  "id": "65d4832216cfe2010b3ea8ed",
                   "userName": "John",
                   "email": "john@gmail.com"
                 },
                 "observers": [
                   {
-                    "id": "65d4847d16cfe2010b3ea8ee",
                     "userName": "Eugine",
                     "email": "eug@gmail.com"
                   },
                   {
-                    "id": "65d4897fb03b6c389a355a2e",
                     "userName": "Nick",
                     "email": "nick@gmail.com"
                   }
@@ -158,23 +164,19 @@
         "updatedAt": "2024-02-20T11:14:38Z",
         "status": "TODO",
         "author": {
-            "id": "65d4830816cfe2010b3ea8ec",
             "userName": "Alex",
             "email": "alex@gmail.com"
         },
         "assignee": {
-            "id": "65d4832216cfe2010b3ea8ed",
             "userName": "John",
             "email": "john@gmail.com"
         },
         "observers": [
             {
-                "id": "65d4847d16cfe2010b3ea8ee",
                 "userName": "Eugine",
                 "email": "eug@gmail.com"
             },
             {
-                "id": "65d4897fb03b6c389a355a2e",
                 "userName": "Nick",
                 "email": "nick@gmail.com"
             }
@@ -194,23 +196,19 @@
           "updatedAt": "2024-02-20T11:14:38Z",
           "status": "TODO",
           "author": {
-              "id": "65d4830816cfe2010b3ea8ec",
               "userName": "Alex",
               "email": "alex@gmail.com"
           },
           "assignee": {
-              "id": "65d4832216cfe2010b3ea8ed",
               "userName": "John",
               "email": "john@gmail.com"
           },
           "observers": [
               {
-                  "id": "65d4847d16cfe2010b3ea8ee",
                   "userName": "Eugine",
                   "email": "eug@gmail.com"
               },
               {
-                  "id": "65d4897fb03b6c389a355a2e",
                   "userName": "Nick",
                   "email": "nick@gmail.com"
               }
@@ -227,23 +225,19 @@
           "updatedAt": "2024-02-20T11:14:38Z",
           "status": "TODO",
           "author": {
-              "id": "65d4830816cfe2010b3ea8ec",
               "userName": "Alex",
               "email": "alex@gmail.com"
           },
           "assignee": {
-              "id": "65d4832216cfe2010b3ea8ed",
               "userName": "John",
               "email": "john@gmail.com"
           },
           "observers": [
               {
-                  "id": "65d4847d16cfe2010b3ea8ee",
                   "userName": "Eugine",
                   "email": "eug@gmail.com"
               },
               {
-                  "id": "65d4897fb03b6c389a355a2e",
                   "userName": "Nick",
                   "email": "nick@gmail.com"
               }
@@ -251,10 +245,11 @@
         }
 - Добавление наблюдателя задачи - PUT/api/tasks/task/{id}
 
-      Добавление задаче с идентификатором - 65d48aa6e9f2c77d536c1920, наблюдателя с идентификатором - 65d4832216cfe2010b3ea8ed:
+      Добавление задаче с идентификатором - 65d48aa6e9f2c77d536c1920, наблюдателя с email - nick@gmail.com:
         
         {
-            "id": "65d4832216cfe2010b3ea8ed",
+            "userName": "Nick",
+            "email": "nick@gmail.com
         }
 
       Формат ответа в случае успеха:
@@ -267,28 +262,23 @@
           "updatedAt": "2024-02-20T11:14:38Z",
           "status": "TODO",
           "author": {
-              "id": "65d4830816cfe2010b3ea8ec",
               "userName": "Alex",
               "email": "alex@gmail.com"
           },
           "assignee": {
-              "id": "65d4832216cfe2010b3ea8ed",
               "userName": "John",
               "email": "john@gmail.com"
           },
           "observers": [
               {
-                  "id": "65d4847d16cfe2010b3ea8ee",
                   "userName": "Eugine",
                   "email": "eug@gmail.com"
               },
               {
-                  "id": "65d4832216cfe2010b3ea8ed",
                   "userName": "John",
                   "email": "john@gmail.com"
               },
               {
-                  "id": "65d4897fb03b6c389a355a2e",
                   "userName": "Nick",
                   "email": "nick@gmail.com"
               }
@@ -310,23 +300,19 @@
           "updatedAt": "2024-02-20T11:14:38Z",
           "status": "TODO",
           "author": {
-              "id": "65d4830816cfe2010b3ea8ec",
               "userName": "Alex",
               "email": "alex@gmail.com"
           },
           "assignee": {
-              "id": "65d4832216cfe2010b3ea8ed",
               "userName": "John",
               "email": "john@gmail.com"
           },
           "observers": [
               {
-                  "id": "65d4847d16cfe2010b3ea8ee",
                   "userName": "Eugine",
                   "email": "eug@gmail.com"
               },
               {
-                  "id": "65d4897fb03b6c389a355a2e",
                   "userName": "Nick",
                   "email": "nick@gmail.com"
               }
@@ -343,23 +329,19 @@
           "updatedAt": "2024-02-20T11:14:38Z",
           "status": "TODO",
           "author": {
-              "id": "65d4830816cfe2010b3ea8ec",
               "userName": "Alex",
               "email": "alex@gmail.com"
           },
           "assignee": {
-              "id": "65d4832216cfe2010b3ea8ed",
               "userName": "John",
               "email": "john@gmail.com"
           },
           "observers": [
               {
-                  "id": "65d4847d16cfe2010b3ea8ee",
                   "userName": "Eugine",
                   "email": "eug@gmail.com"
               },
               {
-                  "id": "65d4897fb03b6c389a355a2e",
                   "userName": "Nick",
                   "email": "nick@gmail.com"
               }

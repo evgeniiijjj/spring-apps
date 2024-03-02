@@ -3,6 +3,9 @@ package com.example.tasktracker.configurations;
 import com.example.tasktracker.AbstractTest;
 import com.example.tasktracker.dtos.TaskDto;
 import com.example.tasktracker.dtos.UserDto;
+import com.example.tasktracker.dtos.UserDtoForAddRole;
+import com.example.tasktracker.dtos.UserDtoForCreate;
+import com.example.tasktracker.enums.RoleType;
 import com.example.tasktracker.enums.TaskStatus;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Mono;
@@ -14,24 +17,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskTrackerRoutersTest extends AbstractTest {
 
-    static UserDto FIRST_USER = new UserDto(FIRST_USER_ID, "Bill", "bill@gmail.com");
-    static UserDto SECOND_USER = new UserDto(SECOND_USER_ID, "John", "john@gmail.com");
-    static UserDto THIRD_USER = new UserDto(THIRD_USER_ID, "Alex", "alex@gmail.com");
-    static UserDto FOURTH_USER = new UserDto(FOURTH_ID, "Eugine", "eugine@gmail.com");
-    static UserDto FIFTH_USER = new UserDto(FIFTH_ID, "Paul", "paul@gmail.com");
+    static UserDto FIRST_USER = new UserDto("Bill", "bill@gmail.com");
+    static UserDto SECOND_USER = new UserDto("John", "john@gmail.com");
+    static UserDto THIRD_USER = new UserDto("Alex", "alex@gmail.com");
+    static UserDto FOURTH_USER = new UserDto("Eugine", "eugine@gmail.com");
+    static UserDto FIFTH_USER = new UserDto("Paul", "paul@gmail.com");
 
     @Test
     public void whenGetAllUsers_thenReturnListOfUsersFromDatabase() {
 
         var expectedData = List.of(
-                new UserDto(FIRST_USER_ID, "Bill", "bill@gmail.com"),
-                new UserDto(SECOND_USER_ID, "John", "john@gmail.com"),
-                new UserDto(THIRD_USER_ID, "Alex", "alex@gmail.com"),
-                new UserDto(FOURTH_ID, "Eugine", "eugine@gmail.com"),
-                new UserDto(FIFTH_ID, "Paul", "paul@gmail.com")
+                FIFTH_USER, SECOND_USER, THIRD_USER, FOURTH_USER, FIFTH_USER
         );
 
         webTestClient.get().uri("/api/users")
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("alex@gmail.com", "alex"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(UserDto.class)
@@ -40,10 +40,11 @@ public class TaskTrackerRoutersTest extends AbstractTest {
     }
 
     @Test
-    public void whenGetUserById_thenReturnUserFromDatabase() {
-        var expectedData = new UserDto(FIRST_USER_ID, "Bill", "bill@gmail.com");
+    public void whenGetUserByEmail_thenReturnUserFromDatabase() {
+        var expectedData = FIRST_USER;
 
-        webTestClient.get().uri("/api/users/user/" + FIRST_USER_ID)
+        webTestClient.get().uri("/api/users/user/bill@gmail.com")
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("alex@gmail.com", "alex"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(UserDto.class)
@@ -54,14 +55,15 @@ public class TaskTrackerRoutersTest extends AbstractTest {
     @Test
     public void whenGetUserByIdAndUserWithSuchIdNotExists_thenReturnNotFoundStatus() {
 
-        webTestClient.get().uri("/api/users/user/" + FIRST_USER_ID + "asdf")
+        webTestClient.get().uri("/api/users/user/billy@gmail.com")
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("alex@gmail.com", "alex"))
                 .exchange()
                 .expectStatus().isNotFound();
     }
 
     @Test
     public void whenCreateUser_thenReturnNewUserFromDatabase() {
-        var newUser = new UserDto(null, "Nick", "nick@gmail.com");
+        var newUser = new UserDtoForCreate("Nick", "nick@gmail.com", "nick");
 
         StepVerifier.create(userRepository.count())
                         .expectNext(5L)
@@ -69,14 +71,12 @@ public class TaskTrackerRoutersTest extends AbstractTest {
                         .verify();
 
         webTestClient.post().uri("/api/users/user")
-                .body(Mono.just(newUser), UserDto.class)
+                .body(Mono.just(newUser), UserDtoForCreate.class)
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody(UserDto.class)
                 .value(user -> {
-                        assertNotNull(user.getId());
-                        newUser.setId(user.getId());
-                        assertEquals(user, newUser);
+                        assertEquals(user, new UserDto("Nick", "nick@gmail.com"));
                 });
 
         StepVerifier.create(userRepository.count())
@@ -86,10 +86,21 @@ public class TaskTrackerRoutersTest extends AbstractTest {
     }
 
     @Test
+    public void whenCreateUserWithInvalidFieldValues_thenReturnBadRequestStatus() {
+        var newUser = new UserDtoForCreate("", "nick@gmail.com", "");
+
+        webTestClient.post().uri("/api/users/user")
+                .body(Mono.just(newUser), UserDtoForCreate.class)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
     public void whenUpdateUser_thenReturnUpdatedUserFromDatabase() {
-        var updatedUser =  new UserDto(FIRST_USER_ID, "Will", "will@gmail.com");
+        var updatedUser =  new UserDto("Alex", "alex@gmail.com");
 
         webTestClient.put().uri("/api/users/user")
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("alex@gmail.com", "alex"))
                 .body(Mono.just(updatedUser), UserDto.class)
                 .exchange()
                 .expectStatus().isAccepted()
@@ -106,17 +117,56 @@ public class TaskTrackerRoutersTest extends AbstractTest {
 
     @Test
     public void whenUpdateUserWithNotExistentId_thenReturnNotFoundStatus() {
-        var updatedUser =  new UserDto(FIRST_USER_ID + "asdfg", "Will", "will@gmail.com");
+        var updatedUser =  new UserDto("Will", "will@gmail.com");
 
         webTestClient.put().uri("/api/users/user")
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("alex@gmail.com", "alex"))
                 .body(Mono.just(updatedUser), UserDto.class)
                 .exchange()
-                .expectStatus().isNotFound();
+                .expectStatus().isForbidden();
 
         StepVerifier.create(userRepository.count())
                 .expectNext(5L)
                 .expectComplete()
                 .verify();
+    }
+
+    @Test
+    public void whenUpdateUserByOtherUser_thenReturnForbiddenStatus() {
+        var updatedUser =  new UserDto("Bill", "bill@gmail.com");
+
+        webTestClient.put().uri("/api/users/user")
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("alex@gmail.com", "alex"))
+                .body(Mono.just(updatedUser), UserDto.class)
+                .exchange()
+                .expectStatus().isForbidden();
+
+        StepVerifier.create(userRepository.count())
+                .expectNext(5L)
+                .expectComplete()
+                .verify();
+    }
+
+    @Test
+    public void whenAddUserRoleByUserWithRoleManager_thenReturnAcceptedStatus() {
+        var updatedUser =  new UserDtoForAddRole("alex@gmail.com", RoleType.ROLE_MANAGER);
+
+        webTestClient.put().uri("/api/users/user/role")
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("bill@gmail.com", "bill"))
+                .body(Mono.just(updatedUser), UserDtoForAddRole.class)
+                .exchange()
+                .expectStatus().isAccepted();
+    }
+
+    @Test
+    public void whenAddUserRoleByUserWithRoleNoManager_thenReturnForbiddenStatus() {
+        var updatedUser =  new UserDtoForAddRole("bill@gmail.com", RoleType.ROLE_MANAGER);
+
+        webTestClient.put().uri("/api/users/user/role")
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("alex@gmail.com", "alex"))
+                .body(Mono.just(updatedUser), UserDto.class)
+                .exchange()
+                .expectStatus().isForbidden();
     }
 
     @Test
@@ -127,7 +177,8 @@ public class TaskTrackerRoutersTest extends AbstractTest {
                 .expectComplete()
                 .verify();
 
-        webTestClient.delete().uri("/api/users/user/" + FIRST_USER_ID)
+        webTestClient.delete().uri("/api/users/user/alex@gmail.com")
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("alex@gmail.com", "alex"))
                 .exchange()
                 .expectStatus().isNoContent();
 
@@ -145,7 +196,8 @@ public class TaskTrackerRoutersTest extends AbstractTest {
                 .expectComplete()
                 .verify();
 
-        webTestClient.delete().uri("/api/users/user/" + FIRST_USER_ID + "asdf")
+        webTestClient.delete().uri("/api/users/user/billy@gmail.com")
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("bill@gmail.com", "bill"))
                 .exchange()
                 .expectStatus().isNotFound();
 
@@ -165,6 +217,7 @@ public class TaskTrackerRoutersTest extends AbstractTest {
         );
 
         webTestClient.get().uri("/api/tasks")
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("alex@gmail.com", "alex"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(TaskDto.class)
@@ -174,15 +227,15 @@ public class TaskTrackerRoutersTest extends AbstractTest {
 
     @Test
     public void whenGetTaskByIdAndIdNotExistent_thenReturnNotFoundStatus() {
-        var expectedData =  new TaskDto(FIRST_TASK_ID, "task_1", "description_task_1", NOW, NOW, TaskStatus.TODO, FIRST_USER, SECOND_USER, List.of(THIRD_USER, FOURTH_USER));
 
         webTestClient.get().uri("/api/tasks/task/" + FIRST_TASK_ID + "asdf")
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("alex@gmail.com", "alex"))
                 .exchange()
                 .expectStatus().isNotFound();
     }
 
     @Test
-    public void whenCreateTask_thenReturnNewTaskFromDatabase() {
+    public void whenCreateTaskByUserWithRoleManager_thenReturnNewTaskFromDatabase() {
         var newTask = new TaskDto(null, "task_4", "description_task_4", null, null, TaskStatus.TODO, FIRST_USER, SECOND_USER, List.of(THIRD_USER, FOURTH_USER));
 
         StepVerifier.create(taskRepository.count())
@@ -191,6 +244,7 @@ public class TaskTrackerRoutersTest extends AbstractTest {
                 .verify();
 
         webTestClient.post().uri("/api/tasks/task")
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("bill@gmail.com", "bill"))
                 .body(Mono.just(newTask), TaskDto.class)
                 .exchange()
                 .expectStatus().isCreated()
@@ -200,7 +254,7 @@ public class TaskTrackerRoutersTest extends AbstractTest {
                     newTask.setId(task.getId());
                     newTask.setCreatedAt(task.getCreatedAt());
                     newTask.setUpdatedAt(task.getUpdatedAt());
-                    assertEquals(task, newTask);
+                    assertEquals(newTask, task);
                 });
 
         StepVerifier.create(taskRepository.count())
@@ -210,17 +264,29 @@ public class TaskTrackerRoutersTest extends AbstractTest {
     }
 
     @Test
+    public void whenCreateTaskByUserWithRoleNoManager_thenReturnForbiddenStatus() {
+        var newTask = new TaskDto(null, "task_4", "description_task_4", null, null, TaskStatus.TODO, FIRST_USER, SECOND_USER, List.of(THIRD_USER, FOURTH_USER));
+
+        webTestClient.post().uri("/api/tasks/task")
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("alex@gmail.com", "alex"))
+                .body(Mono.just(newTask), TaskDto.class)
+                .exchange()
+                .expectStatus().isForbidden();
+    }
+
+    @Test
     public void whenUpdateTask_thenReturnUpdatedTaskFromDatabase() {
         var updatedTask = new TaskDto(FIRST_TASK_ID, "task_for_update", "description_task_for_update", NOW, NOW, TaskStatus.TODO, FIRST_USER, SECOND_USER, List.of(THIRD_USER, FOURTH_USER));
 
         webTestClient.put().uri("/api/tasks/task")
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("bill@gmail.com", "bill"))
                 .body(Mono.just(updatedTask), TaskDto.class)
                 .exchange()
                 .expectStatus().isAccepted()
                 .expectBody(TaskDto.class)
                 .value(task -> {
                         updatedTask.setUpdatedAt(task.getUpdatedAt());
-                        assertEquals(task, updatedTask);
+                        assertEquals(updatedTask, task);
                 });
 
         StepVerifier.create(taskRepository.count())
@@ -234,6 +300,7 @@ public class TaskTrackerRoutersTest extends AbstractTest {
         var updatedTask = new TaskDto(FIRST_TASK_ID + "asdf", "task_for_update", "description_task_for_update", NOW, NOW, TaskStatus.TODO, FIRST_USER, SECOND_USER, List.of(THIRD_USER, FOURTH_USER));
 
         webTestClient.put().uri("/api/tasks/task")
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("bill@gmail.com", "bill"))
                 .body(Mono.just(updatedTask), TaskDto.class)
                 .exchange()
                 .expectStatus().isNotFound();
@@ -246,16 +313,17 @@ public class TaskTrackerRoutersTest extends AbstractTest {
 
     @Test
     public void whenAddTaskObserver_thenReturnUpdatedTaskFromDatabase() {
-        var updatedTask = new TaskDto(FIRST_TASK_ID, "task_for_update", "description_task_for_update", NOW, NOW, TaskStatus.TODO, FIRST_USER, SECOND_USER, List.of(THIRD_USER, FOURTH_USER, FIFTH_USER));
+        var updatedTask = new TaskDto(FIRST_TASK_ID, "task_1", "description_task_1", NOW, NOW, TaskStatus.TODO, FIRST_USER, SECOND_USER, List.of(THIRD_USER, FOURTH_USER, FIFTH_USER));
 
-        webTestClient.put().uri("/api/tasks/task?taskId=" + FIRST_TASK_ID + "&userId=" + FIFTH_USER.getId())
-                .body(Mono.just(updatedTask), TaskDto.class)
+        webTestClient.put().uri("/api/tasks/task/" + FIRST_TASK_ID)
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("alex@gmail.com", "alex"))
+                .body(Mono.just(FIFTH_USER), UserDto.class)
                 .exchange()
                 .expectStatus().isAccepted()
                 .expectBody(TaskDto.class)
                 .value(task -> {
                     updatedTask.setUpdatedAt(task.getUpdatedAt());
-                    assertEquals(task, updatedTask);
+                    assertEquals(updatedTask, task);
                 });
 
         StepVerifier.create(taskRepository.count())
@@ -265,10 +333,11 @@ public class TaskTrackerRoutersTest extends AbstractTest {
     }
 
     @Test
-    public void whenAddTaskObserverAndIdsNotExist_thenReturnNotFoundStatus() {
+    public void whenAddTaskObserverAndIdNotExist_thenReturnNotFoundStatus() {
         var updatedTask = new TaskDto(FIRST_TASK_ID + "asdf", "task_for_update", "description_task_for_update", NOW, NOW, TaskStatus.TODO, FIRST_USER, SECOND_USER, List.of(THIRD_USER, FOURTH_USER, FIFTH_USER));
 
-        webTestClient.put().uri("/api/tasks/task?taskId=" + FIRST_TASK_ID + "&userId=" + FIFTH_USER.getId() + "adsf")
+        webTestClient.put().uri("/api/tasks/task?taskId=" + FIRST_TASK_ID + "&userId=" + FIFTH_USER.getEmail() + "adsf")
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("bill@gmail.com", "bill"))
                 .body(Mono.just(updatedTask), TaskDto.class)
                 .exchange()
                 .expectStatus().isNotFound();
@@ -288,6 +357,7 @@ public class TaskTrackerRoutersTest extends AbstractTest {
                 .verify();
 
         webTestClient.delete().uri("/api/tasks/task/" + FIRST_TASK_ID)
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("bill@gmail.com", "bill"))
                 .exchange()
                 .expectStatus().isNoContent();
 
@@ -306,6 +376,7 @@ public class TaskTrackerRoutersTest extends AbstractTest {
                 .verify();
 
         webTestClient.delete().uri("/api/tasks/task/" + FIRST_TASK_ID + "adsf")
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("bill@gmail.com", "bill"))
                 .exchange()
                 .expectStatus().isNotFound();
 

@@ -1,8 +1,8 @@
 package com.example.newsservice.services.impl;
 
-import com.example.newsservice.aop.Verifiable;
+import com.example.newsservice.aop.VerifyCommentDelete;
+import com.example.newsservice.aop.VerifyCommentUpdate;
 import com.example.newsservice.dtos.CommentDto;
-import com.example.newsservice.dtos.UserDto;
 import com.example.newsservice.entities.Comment;
 import com.example.newsservice.entities.User;
 import com.example.newsservice.exceptions.NotFoundException;
@@ -38,7 +38,7 @@ public class CommentServiceImpl implements CommentService {
         return mapper.toDtoList(commentRepository.findByUserId(userId));
     }
 
-    @Verifiable
+    @VerifyCommentUpdate
     @Override
     public CommentDto createOrUpdate(CommentDto commentDto) {
         Comment comment = mapper.toEntity(commentDto);
@@ -58,7 +58,7 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.findById(id).map(mapper::toDto);
     }
 
-    @Verifiable
+    @VerifyCommentDelete
     @Override
     public void deleteById(long id) {
         if (!commentRepository.existsById(id)) {

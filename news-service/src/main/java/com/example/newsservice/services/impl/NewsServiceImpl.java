@@ -1,6 +1,7 @@
 package com.example.newsservice.services.impl;
 
-import com.example.newsservice.aop.Verifiable;
+import com.example.newsservice.aop.VerifyNewsDelete;
+import com.example.newsservice.aop.VerifyNewsUpdate;
 import com.example.newsservice.dtos.NewsDto;
 import com.example.newsservice.entities.News;
 import com.example.newsservice.entities.User;
@@ -44,7 +45,7 @@ public class NewsServiceImpl implements NewsService {
         return mapper.toDtoList(newsRepository.findAll());
     }
 
-    @Verifiable
+    @VerifyNewsUpdate
     @Override
     public NewsDto createOrUpdate(NewsDto newsDto) {
         News news = mapper.toEntity(newsDto);
@@ -64,7 +65,7 @@ public class NewsServiceImpl implements NewsService {
         return newsRepository.findById(id).map(mapper::toDto);
     }
 
-    @Verifiable
+    @VerifyNewsDelete
     @Override
     public void deleteById(long id) {
         if (!newsRepository.existsById(id)) {

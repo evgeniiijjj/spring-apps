@@ -1,6 +1,7 @@
 package com.example.newsservice.services.impl;
 
-import com.example.newsservice.aop.Verifiable;
+import com.example.newsservice.aop.VerifyUserDelete;
+import com.example.newsservice.aop.VerifyUserUpdate;
 import com.example.newsservice.dtos.UserDto;
 import com.example.newsservice.dtos.UserDtoForCreate;
 import com.example.newsservice.dtos.UserDtoForDelete;
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
         return mapper.toDto(repository.save(user));
     }
 
-    @Verifiable
+    @VerifyUserUpdate
     @Override
     public UserDto update(UserDto userDto) {
         User user = mapper.toEntity(userDto);
@@ -76,7 +77,7 @@ public class UserServiceImpl implements UserService {
         return repository.existsByEmail(email);
     }
 
-    @Verifiable
+    @VerifyUserDelete
     @Override
     public void delete(UserDtoForDelete userForDelete) {
         repository.findByEmail(userForDelete.getEmail())

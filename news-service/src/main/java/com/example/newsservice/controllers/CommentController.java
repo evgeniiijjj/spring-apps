@@ -1,7 +1,6 @@
 package com.example.newsservice.controllers;
 
 import com.example.newsservice.dtos.CommentDto;
-import com.example.newsservice.dtos.UserDto;
 import com.example.newsservice.services.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

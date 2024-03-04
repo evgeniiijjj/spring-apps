@@ -3,7 +3,6 @@ package com.example.tasktracker.mappers;
 import com.example.tasktracker.dtos.TaskDto;
 import com.example.tasktracker.dtos.UserDto;
 import com.example.tasktracker.entities.Task;
-import com.example.tasktracker.entities.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

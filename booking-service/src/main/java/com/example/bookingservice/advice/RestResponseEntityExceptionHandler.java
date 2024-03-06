@@ -1,6 +1,7 @@
 package com.example.bookingservice.advice;
 
 import com.example.bookingservice.exceptions.NotFoundException;
+import com.example.bookingservice.exceptions.UserAlreadyExistsException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class RestResponseEntityExceptionHandler {
                 .body(ex.getMessage());
     }
 
-    @ExceptionHandler({ MethodArgumentNotValidException.class })
+    @ExceptionHandler({ MethodArgumentNotValidException.class, UserAlreadyExistsException.class })
     public ResponseEntity<Object> handleNotValidException(
             MethodArgumentNotValidException ex, WebRequest request) {
         BindingResult bindingResult = ex.getBindingResult();

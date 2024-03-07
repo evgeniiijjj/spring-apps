@@ -3,6 +3,8 @@ package com.example.bookingservice.dtos;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class RoomDto {
@@ -12,6 +14,6 @@ public class RoomDto {
     private Integer number;
     private Integer price;
     private Integer capacity;
-    private String bookingDates;
     private HotelDto hotel;
+    private List<BookingDto> bookings;
 }

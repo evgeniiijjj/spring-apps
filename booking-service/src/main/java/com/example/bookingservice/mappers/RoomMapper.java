@@ -11,8 +11,8 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface RoomMapper {
     RoomDto toDto(Room room);
-    @Mapping(target = "bookingDates", ignore = true)
     @Mapping(target = "hotel", ignore = true)
+    @Mapping(target = "bookings", ignore = true)
     Room toEntity(RoomDtoForCreateOrUpdate room);
     List<RoomDto> toDtoList(List<Room> rooms);
 }

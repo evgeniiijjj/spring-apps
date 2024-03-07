@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -33,5 +34,6 @@ public class Room {
     @JoinColumn(name = "hotel_id")
     @ManyToOne(targetEntity = Hotel.class, cascade = CascadeType.ALL)
     private Hotel hotel;
-    private String bookingDates;
+    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Booking> bookings;
 }

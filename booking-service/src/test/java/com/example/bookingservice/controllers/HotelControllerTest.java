@@ -1,6 +1,7 @@
 package com.example.bookingservice.controllers;
 
 import com.example.bookingservice.AbstractTest;
+import com.example.bookingservice.dtos.HotelCriteria;
 import com.example.bookingservice.dtos.HotelDto;
 import com.example.bookingservice.dtos.HotelDtoForChangeRating;
 import com.example.bookingservice.dtos.HotelDtoWithRating;
@@ -31,7 +32,7 @@ public class HotelControllerTest extends AbstractTest {
         List<HotelDto> actualResult = objectMapper.readValue(
                 mockMvc
                         .perform(
-                                get("/api/hotels?pageNum=0&pageSize=10")
+                                get("/api/hotels?pageNumber=0&pageSize=10")
                                         .with(httpBasic("John", "john"))
                         )
                         .andExpect(status().isOk())
@@ -50,7 +51,7 @@ public class HotelControllerTest extends AbstractTest {
         List<HotelDto> actualResult = objectMapper.readValue(
                 mockMvc
                         .perform(
-                                get("/api/hotels?pageNum=0&pageSize=10")
+                                get("/api/hotels?pageNumber=0&pageSize=10")
                                         .with(httpBasic("Alex", "alex"))
                         )
                         .andExpect(status().isOk())
@@ -259,5 +260,52 @@ public class HotelControllerTest extends AbstractTest {
         );
 
         assertEquals(expectedResult, actualResult);
+    }
+
+
+    @Test
+    public void whenGetHotelsByCriteriaByUserWithAdminRole_thenReturnListHotelWithRating() throws Exception {
+
+        HotelCriteria criteria = new HotelCriteria(null, null, null, null, null, 4F, null);
+
+        List<HotelDtoWithRating> actualResult = objectMapper.readValue(
+                mockMvc
+                        .perform(
+                                post("/api/hotels?pageNumber=0&pageSize=10")
+                                        .with(httpBasic("John", "john"))
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(criteria))
+                        )
+                        .andExpect(status().isOk())
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(),
+                new TypeReference<>() {}
+        );
+
+        assertEquals(2, actualResult.size());
+    }
+
+    @Test
+    public void whenGetHotelsByCriteriaByUserWithNoAdminRole_thenReturnListHotelWithRating() throws Exception {
+
+        HotelCriteria criteria = new HotelCriteria(null, null, "Moskow", null, null, null, null);
+
+        List<HotelDtoWithRating> actualResult = objectMapper.readValue(
+                mockMvc
+                        .perform(
+                                post("/api/hotels?pageNumber=0&pageSize=10")
+                                        .with(httpBasic("Alex", "alex"))
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(criteria))
+                        )
+                        .andExpect(status().isOk())
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(),
+                new TypeReference<>() {}
+        );
+
+        assertEquals(3, actualResult.size());
     }
 }

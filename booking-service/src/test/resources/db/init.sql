@@ -46,17 +46,17 @@ create table bookings
 
 insert into hotels (hotel_name, ad_title, city, address, city_center_distance, rating, number_of_ratings)
 values ('first_hotel', 'the best hotel', 'Moskow', 'ul.Moskowskay, d.23', 200, 4, 4),
-        ('second_hotel', 'the very best hotel', 'Moskow', 'ul.Lenina, d.3', 150, 4, 19),
+        ('second_hotel', 'the very best hotel', 'Moskow', 'ul.Lenina, d.3', 150, 3, 19),
         ('third_hotel', 'the very very best hotel', 'Moskow', 'ul.Mira, d.30', 750, 4, 39);
 
 insert into rooms (room_name, description, number, price, capacity, hotel_id)
-values ('first_room', 'nice room', 1, 1000, 2, 1),
-        ('second_room', 'very nice room', 2, 1000, 2, 1),
-        ('third_room', 'very very nice room', 3, 1000, 2, 1),
+values ('first_room', 'nice room', 1, 633, 2, 1),
+        ('second_room', 'very nice room', 2, 890, 2, 1),
+        ('third_room', 'very very nice room', 3, 786, 2, 2),
         ('first_room', 'nice room', 1, 1000, 2, 2),
         ('second_room', 'very nice room', 2, 1000, 2, 2),
         ('third_room', 'very very nice room', 3, 1000, 2, 2),
-        ('first_room', 'nice room', 1, 1000, 2, 3),
+        ('first_room', 'very nice room', 1, 1000, 2, 3),
         ('second_room', 'very nice room', 2, 1000, 2, 3),
         ('third_room', 'very very nice room', 3, 1000, 2, 3);
 

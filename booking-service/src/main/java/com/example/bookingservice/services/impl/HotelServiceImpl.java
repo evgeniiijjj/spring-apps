@@ -1,5 +1,6 @@
 package com.example.bookingservice.services.impl;
 
+import com.example.bookingservice.dtos.HotelCriteria;
 import com.example.bookingservice.dtos.HotelDto;
 import com.example.bookingservice.dtos.HotelDtoForChangeRating;
 import com.example.bookingservice.dtos.HotelDtoWithRating;
@@ -10,6 +11,7 @@ import com.example.bookingservice.repositories.HotelRepository;
 import com.example.bookingservice.services.HotelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -64,6 +66,13 @@ public class HotelServiceImpl implements HotelService {
         hotel.setRating(Math.round((hotel.getRating() * hotel.getNumberOfRatings() - hotel.getRating() + hotelDto.getNewMark()) / hotel.getNumberOfRatings() * 10) / 10F);
         hotel.setNumberOfRatings(hotel.getNumberOfRatings() + 1);
         return mapper.toDtoWithRating(hotel);
+    }
+
+    @Override
+    public List<HotelDtoWithRating> findAllByCriteria(Pageable pageable, HotelCriteria criteria) {
+        return mapper.toDtoWithRatingList(
+                repository.findAll(Specification.where(criteria.spec()), pageable).getContent()
+        );
     }
 
     private void validateId(Long id) {

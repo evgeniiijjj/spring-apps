@@ -1,5 +1,6 @@
 package com.example.bookingservice.controllers;
 
+import com.example.bookingservice.dtos.HotelCriteria;
 import com.example.bookingservice.dtos.HotelDto;
 import com.example.bookingservice.dtos.HotelDtoForChangeRating;
 import com.example.bookingservice.dtos.HotelDtoWithRating;
@@ -26,8 +27,15 @@ public class HotelController {
     private final HotelService service;
 
     @GetMapping("/api/hotels")
-    public ResponseEntity<List<HotelDtoWithRating>> getHotels(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
-        return ResponseEntity.ok(service.getAll(PageRequest.of(pageNum, pageSize)));
+    public ResponseEntity<List<HotelDtoWithRating>> getHotels(@RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
+        return ResponseEntity.ok(service.getAll(PageRequest.of(pageNumber, pageSize)));
+    }
+
+    @PostMapping("/api/hotels")
+    public ResponseEntity<List<HotelDtoWithRating>> getHotelsByCriteria(@RequestParam Integer pageNumber,
+                                                                  @RequestParam Integer pageSize,
+                                                                  @RequestBody HotelCriteria criteria) {
+        return ResponseEntity.ok(service.findAllByCriteria(PageRequest.of(pageNumber, pageSize), criteria));
     }
 
     @GetMapping("/api/hotels/hotel/{id}")

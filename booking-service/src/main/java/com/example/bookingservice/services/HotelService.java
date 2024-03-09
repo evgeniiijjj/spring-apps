@@ -1,6 +1,7 @@
 package com.example.bookingservice.services;
 
 import com.example.bookingservice.dtos.HotelDto;
+import com.example.bookingservice.dtos.HotelDtoForChangeRating;
 import com.example.bookingservice.dtos.HotelDtoWithRating;
 import org.springframework.data.domain.Pageable;
 
@@ -12,4 +13,6 @@ public interface HotelService {
     HotelDto create(HotelDto hotel);
     HotelDtoWithRating update(HotelDto hotel);
     Long deleteById(Long id);
+
+    HotelDtoWithRating updateRating(HotelDtoForChangeRating hotel);
 }

@@ -30,7 +30,7 @@ public class Hotel {
     private String address;
     @Column(name = "city_center_distance")
     private Integer cityCenterDistance;
-    private Integer rating;
+    private Float rating;
     @Column(name = "number_of_ratings")
     private Integer numberOfRatings;
     @OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

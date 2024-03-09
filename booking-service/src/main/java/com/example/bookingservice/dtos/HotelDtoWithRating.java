@@ -1,10 +1,12 @@
 package com.example.bookingservice.dtos;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class HotelDtoWithRating {
     private Long id;
     private String name;
@@ -12,6 +14,6 @@ public class HotelDtoWithRating {
     private String city;
     private String address;
     private Integer cityCenterDistance;
-    private Integer rating;
+    private Float rating;
     private Integer numberOfRatings;
 }

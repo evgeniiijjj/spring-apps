@@ -2,6 +2,8 @@ package com.example.bookingservice.controllers;
 
 import com.example.bookingservice.AbstractTest;
 import com.example.bookingservice.dtos.HotelDto;
+import com.example.bookingservice.dtos.HotelDtoForChangeRating;
+import com.example.bookingservice.dtos.HotelDtoWithRating;
 import com.example.bookingservice.repositories.HotelRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
@@ -209,5 +211,53 @@ public class HotelControllerTest extends AbstractTest {
                                 .with(httpBasic("Alex", "alex"))
                 )
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void whenChangeHotelRatingByUserWithAdminRole_thenReturnHotelWithRating() throws Exception {
+
+        HotelDtoWithRating expectedResult = new HotelDtoWithRating(1L, "first_hotel", "the best hotel", "Moskow", "ul.Moskowskay, d.23", 200, 3.8F, 5);
+        HotelDtoForChangeRating newMark = new HotelDtoForChangeRating(1L, 3);
+
+        HotelDtoWithRating actualResult = objectMapper.readValue(
+                mockMvc
+                        .perform(
+                                put("/api/hotels/hotel/rating")
+                                        .with(httpBasic("John", "john"))
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(newMark))
+                        )
+                        .andExpect(status().isAccepted())
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(),
+                HotelDtoWithRating.class
+        );
+
+        assertEquals(expectedResult, actualResult);
+    }
+
+    @Test
+    public void whenChangeHotelRatingByUserWithNoAdminRole_thenReturnHotelWithRating() throws Exception {
+
+        HotelDtoWithRating expectedResult = new HotelDtoWithRating(1L, "first_hotel", "the best hotel", "Moskow", "ul.Moskowskay, d.23", 200, 3.8F, 5);
+        HotelDtoForChangeRating newMark = new HotelDtoForChangeRating(1L, 3);
+
+        HotelDtoWithRating actualResult = objectMapper.readValue(
+                mockMvc
+                        .perform(
+                                put("/api/hotels/hotel/rating")
+                                        .with(httpBasic("Alex", "alex"))
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(newMark))
+                        )
+                        .andExpect(status().isAccepted())
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(),
+                HotelDtoWithRating.class
+        );
+
+        assertEquals(expectedResult, actualResult);
     }
 }

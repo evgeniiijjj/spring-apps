@@ -1,6 +1,7 @@
 package com.example.bookingservice.controllers;
 
 import com.example.bookingservice.dtos.HotelDto;
+import com.example.bookingservice.dtos.HotelDtoForChangeRating;
 import com.example.bookingservice.dtos.HotelDtoWithRating;
 import com.example.bookingservice.services.HotelService;
 import lombok.RequiredArgsConstructor;
@@ -48,5 +49,10 @@ public class HotelController {
     @DeleteMapping("/api/hotels/hotel/{id}")
     public ResponseEntity<Long> delete(@PathVariable Long id) {
         return ResponseEntity.ok(service.deleteById(id));
+    }
+
+    @PutMapping("/api/hotels/hotel/rating")
+    public ResponseEntity<HotelDtoWithRating> updateHotelRating(@RequestBody HotelDtoForChangeRating hotel) {
+        return ResponseEntity.accepted().body(service.updateRating(hotel));
     }
 }

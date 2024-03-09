@@ -1,7 +1,9 @@
 package com.example.bookingservice.services.impl;
 
 import com.example.bookingservice.dtos.HotelDto;
+import com.example.bookingservice.dtos.HotelDtoForChangeRating;
 import com.example.bookingservice.dtos.HotelDtoWithRating;
+import com.example.bookingservice.entities.Hotel;
 import com.example.bookingservice.exceptions.NotFoundException;
 import com.example.bookingservice.mappers.HotelMapper;
 import com.example.bookingservice.repositories.HotelRepository;
@@ -53,6 +55,15 @@ public class HotelServiceImpl implements HotelService {
         validateId(id);
         repository.deleteById(id);
         return id;
+    }
+
+    @Override
+    public HotelDtoWithRating updateRating(HotelDtoForChangeRating hotelDto) {
+        Hotel hotel = repository.findById(hotelDto.getId())
+                .orElseThrow(() -> new NotFoundException(MessageFormat.format("Hotel with id - {0} not found!", hotelDto.getId())));
+        hotel.setRating(Math.round((hotel.getRating() * hotel.getNumberOfRatings() - hotel.getRating() + hotelDto.getNewMark()) / hotel.getNumberOfRatings() * 10) / 10F);
+        hotel.setNumberOfRatings(hotel.getNumberOfRatings() + 1);
+        return mapper.toDtoWithRating(hotel);
     }
 
     private void validateId(Long id) {

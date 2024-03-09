@@ -8,7 +8,7 @@ create table hotels
     city varchar(50) not null,
     address varchar(255) not null,
     city_center_distance int not null,
-    rating int,
+    rating real,
     number_of_ratings int
 );
 
@@ -45,7 +45,7 @@ create table bookings
 );
 
 insert into hotels (hotel_name, ad_title, city, address, city_center_distance, rating, number_of_ratings)
-values ('first_hotel', 'the best hotel', 'Moskow', 'ul.Moskowskay, d.23', 200, 4, 29),
+values ('first_hotel', 'the best hotel', 'Moskow', 'ul.Moskowskay, d.23', 200, 4, 4),
         ('second_hotel', 'the very best hotel', 'Moskow', 'ul.Lenina, d.3', 150, 4, 19),
         ('third_hotel', 'the very very best hotel', 'Moskow', 'ul.Mira, d.30', 750, 4, 39);
 

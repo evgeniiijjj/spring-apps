@@ -1,12 +1,14 @@
 package com.example.bookingservice.dtos;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class RoomDto {
     private Long id;
     private String name;
@@ -15,5 +17,5 @@ public class RoomDto {
     private Integer price;
     private Integer capacity;
     private HotelDto hotel;
-    private List<BookingDto> bookings;
+    private List<BookingDates> bookings;
 }

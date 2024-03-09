@@ -24,28 +24,28 @@ public class HotelController {
 
     private final HotelService service;
 
-    @GetMapping("api/hotels")
+    @GetMapping("/api/hotels")
     public ResponseEntity<List<HotelDtoWithRating>> getHotels(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
         return ResponseEntity.ok(service.getAll(PageRequest.of(pageNum, pageSize)));
     }
 
-    @GetMapping("api/hotels/hotel/{id}")
+    @GetMapping("/api/hotels/hotel/{id}")
     public ResponseEntity<HotelDtoWithRating> getHotelById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getById(id));
     }
 
-    @PostMapping("api/hotels/hotel")
+    @PostMapping("/api/hotels/hotel")
     public ResponseEntity<HotelDto> create(@RequestBody HotelDto hotel) {
         HotelDto result = service.create(hotel);
         return ResponseEntity.created(URI.create("api/hotels/hotel/" + result.getId())).body(result);
     }
 
-    @PutMapping("api/hotels/hotel")
+    @PutMapping("/api/hotels/hotel")
     public ResponseEntity<HotelDtoWithRating> update(@RequestBody HotelDto hotel) {
         return ResponseEntity.accepted().body(service.update(hotel));
     }
 
-    @DeleteMapping("api/hotels/hotel/{id}")
+    @DeleteMapping("/api/hotels/hotel/{id}")
     public ResponseEntity<Long> delete(@PathVariable Long id) {
         return ResponseEntity.ok(service.deleteById(id));
     }

@@ -14,6 +14,7 @@ public interface HotelMapper {
     HotelDtoWithRating toDtoWithRating(Hotel hotel);
     @Mapping(target = "rating", ignore = true)
     @Mapping(target = "numberOfRatings", ignore = true)
+    @Mapping(target = "rooms", ignore = true)
     Hotel toEntity(HotelDto hotelDto);
     List<HotelDtoWithRating> toDtoWithRatingList(List<Hotel> hotels);
 }

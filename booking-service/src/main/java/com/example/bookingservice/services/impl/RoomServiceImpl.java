@@ -2,6 +2,7 @@ package com.example.bookingservice.services.impl;
 
 import com.example.bookingservice.dtos.RoomDto;
 import com.example.bookingservice.dtos.RoomDtoForCreateOrUpdate;
+import com.example.bookingservice.entities.Room;
 import com.example.bookingservice.exceptions.NotFoundException;
 import com.example.bookingservice.mappers.RoomMapper;
 import com.example.bookingservice.repositories.RoomRepository;
@@ -20,14 +21,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public RoomDto getById(Long id) {
-        return mapper.toDto(
-                repository.findById(id)
-                        .orElseThrow(() ->
-                                new NotFoundException(
-                                        MessageFormat.format("Room with id - {0} not found!", id)
-                                )
-                        )
-        );
+        return mapper.toDto(getRoomById(id));
     }
 
     @Override
@@ -36,21 +30,25 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public RoomDto update(RoomDtoForCreateOrUpdate room) {
-        validateId(room.getId());
-        return mapper.toDto(repository.save(mapper.toEntity(room)));
+    public RoomDto update(RoomDtoForCreateOrUpdate roomDto) {
+        Room room = mapper.toEntity(roomDto);
+        room.setBookings(getRoomById(roomDto.getId()).getBookings());
+        return mapper.toDto(repository.save(room));
     }
 
     @Override
     public Long deleteById(Long id) {
-        validateId(id);
-        repository.deleteById(id);
+        repository.delete(getRoomById(id));
         return id;
     }
 
-    private void validateId(Long id) {
-        if (!repository.existsById(id)) {
-            throw new NotFoundException(MessageFormat.format("Room with id - {0} not found!", id));
-        }
+    private Room getRoomById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() ->
+                        new NotFoundException(
+                                MessageFormat
+                                        .format("Room with id - {0} not found!", id)
+                        )
+                );
     }
 }

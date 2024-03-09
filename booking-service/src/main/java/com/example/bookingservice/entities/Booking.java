@@ -23,10 +23,10 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @JoinColumn(name = "room_id")
-    @ManyToOne(targetEntity = Room.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Room.class, cascade = CascadeType.MERGE)
     private Room room;
     @JoinColumn(name = "user_id")
-    @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = User.class)
     private User user;
     @Column(name = "check_in")
     private Instant checkIn;

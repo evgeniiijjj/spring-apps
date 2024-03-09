@@ -1,6 +1,7 @@
 package com.example.bookingservice.controllers;
 
 import com.example.bookingservice.dtos.UserDto;
+import com.example.bookingservice.dtos.UserDtoForCreate;
 import com.example.bookingservice.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,23 +21,23 @@ public class UserController {
 
     private final UserService service;
 
-    @GetMapping("api/users/user/{name}")
+    @GetMapping("/api/users/user/{name}")
     public ResponseEntity<UserDto> getUserByName(@PathVariable String name) {
         return ResponseEntity.ok(service.getByName(name));
     }
 
-    @PostMapping("api/users/user")
-    public ResponseEntity<UserDto> create(@RequestBody UserDto user) {
+    @PostMapping("/api/users/user")
+    public ResponseEntity<UserDto> create(@RequestBody UserDtoForCreate user) {
         UserDto result = service.create(user);
-        return ResponseEntity.created(URI.create("api/users/user/" + result.getUserName())).body(result);
+        return ResponseEntity.created(URI.create("/api/users/user/" + result.getUserName())).body(result);
     }
 
-    @PutMapping("api/users/user")
+    @PutMapping("/api/users/user")
     public ResponseEntity<UserDto> update(@RequestBody UserDto user) {
         return ResponseEntity.accepted().body(service.update(user));
     }
 
-    @DeleteMapping("api/users/user/{name}")
+    @DeleteMapping("/api/users/user/{name}")
     public ResponseEntity<String> delete(@PathVariable String name) {
         return ResponseEntity.ok(service.deleteByName(name));
     }

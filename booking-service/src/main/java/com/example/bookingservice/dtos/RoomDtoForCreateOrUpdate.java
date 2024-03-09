@@ -1,9 +1,14 @@
 package com.example.bookingservice.dtos;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class RoomDtoForCreateOrUpdate {
@@ -18,4 +23,6 @@ public class RoomDtoForCreateOrUpdate {
     private Integer price;
     @NotBlank(message = "Вместимость комнаты должна быть указана!")
     private Integer capacity;
+    @NotNull(message = "Отель должен быть указан!")
+    private HotelDto hotel;
 }

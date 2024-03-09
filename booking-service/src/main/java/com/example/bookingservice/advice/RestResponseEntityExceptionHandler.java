@@ -1,5 +1,6 @@
 package com.example.bookingservice.advice;
 
+import com.example.bookingservice.exceptions.AccessDeniedException;
 import com.example.bookingservice.exceptions.NotFoundException;
 import com.example.bookingservice.exceptions.UserAlreadyExistsException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -20,6 +21,13 @@ public class RestResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleNotFoundException(
             Exception ex, WebRequest request) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler({ AccessDeniedException.class })
+    public ResponseEntity<Object> handleAccessDeniedException(
+            Exception ex, WebRequest request) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(ex.getMessage());
     }
 

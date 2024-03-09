@@ -3,7 +3,6 @@ package com.example.bookingservice.entities;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,7 +14,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -25,15 +23,15 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name_room")
+    @Column(name = "room_name")
     private String name;
     private String description;
     private Integer number;
     private Integer price;
     private Integer capacity;
     @JoinColumn(name = "hotel_id")
-    @ManyToOne(targetEntity = Hotel.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Hotel.class, cascade = CascadeType.MERGE)
     private Hotel hotel;
-    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<Booking> bookings;
 }

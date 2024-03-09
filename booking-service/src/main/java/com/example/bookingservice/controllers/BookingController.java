@@ -21,22 +21,29 @@ public class BookingController {
 
     private final BookingService service;
 
-    @GetMapping("api/bookings")
+    @GetMapping("/api/bookings")
     public ResponseEntity<List<BookingDto>> getAll(@RequestParam Integer pageNumber,
                                                                 @RequestParam Integer pageSize) {
         return ResponseEntity.ok(service.getAll(PageRequest.of(pageNumber, pageSize)));
     }
 
-    @GetMapping("api/bookings/booking/{roomId}")
+    @GetMapping("/api/bookings/room/{roomId}")
     public ResponseEntity<List<BookingDto>> getAllByRoomId(@RequestParam Integer pageNumber,
                                                                 @RequestParam Integer pageSize,
                                                                 @PathVariable Long roomId) {
         return ResponseEntity.ok(service.getAllByRoom(PageRequest.of(pageNumber, pageSize), roomId));
     }
 
-    @PostMapping("api/bookings/booking")
+    @GetMapping("/api/bookings/user/{userName}")
+    public ResponseEntity<List<BookingDto>> getAllByUserName(@RequestParam Integer pageNumber,
+                                                           @RequestParam Integer pageSize,
+                                                           @PathVariable String userName) {
+        return ResponseEntity.ok(service.getAllByUserName(PageRequest.of(pageNumber, pageSize), userName));
+    }
+
+    @PostMapping("/api/bookings/booking")
     public ResponseEntity<BookingDto> create(@RequestBody BookingDto booking) {
         BookingDto result = service.create(booking);
-        return ResponseEntity.created(URI.create("api/bookings/booking/" + result.getId())).body(result);
+        return ResponseEntity.created(URI.create("/api/bookings/booking/" + result.getId())).body(result);
     }
 }

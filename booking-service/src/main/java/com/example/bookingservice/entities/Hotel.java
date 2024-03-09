@@ -1,13 +1,18 @@
 package com.example.bookingservice.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,8 +29,10 @@ public class Hotel {
     private String city;
     private String address;
     @Column(name = "city_center_distance")
-    private String cityCenterDistance;
+    private Integer cityCenterDistance;
     private Integer rating;
     @Column(name = "number_of_ratings")
     private Integer numberOfRatings;
+    @OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Room> rooms;
 }

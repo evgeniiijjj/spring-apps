@@ -1,11 +1,13 @@
 package com.example.bookingservice.dtos;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class HotelDto {
     private Long id;
     @NotBlank(message = "Имя отеля должно быть указано!")
@@ -17,5 +19,5 @@ public class HotelDto {
     @NotBlank(message = "Адрес расположения отеля должен быть указан!")
     private String address;
     @NotBlank(message = "Растояние до центра города должно быть указано!")
-    private String cityCenterDistance;
+    private Integer cityCenterDistance;
 }

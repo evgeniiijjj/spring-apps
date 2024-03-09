@@ -21,23 +21,23 @@ public class RoomController {
 
     private final RoomService service;
 
-    @GetMapping("api/rooms/room/{id}")
+    @GetMapping("/api/rooms/room/{id}")
     public ResponseEntity<RoomDto> getRoomById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getById(id));
     }
 
-    @PostMapping("api/rooms/room")
+    @PostMapping("/api/rooms/room")
     public ResponseEntity<RoomDto> create(@RequestBody RoomDtoForCreateOrUpdate room) {
         RoomDto result = service.create(room);
         return ResponseEntity.created(URI.create("api/rooms/room/" + result.getId())).body(result);
     }
 
-    @PutMapping("api/rooms/room")
+    @PutMapping("/api/rooms/room")
     public ResponseEntity<RoomDto> update(@RequestBody RoomDtoForCreateOrUpdate hotel) {
         return ResponseEntity.accepted().body(service.update(hotel));
     }
 
-    @DeleteMapping("api/rooms/room/{id}")
+    @DeleteMapping("/api/rooms/room/{id}")
     public ResponseEntity<Long> delete(@PathVariable Long id) {
         return ResponseEntity.ok(service.deleteById(id));
     }

@@ -8,5 +8,6 @@ import java.util.List;
 public interface BookingService {
     List<BookingDto> getAll(Pageable pageable);
     List<BookingDto> getAllByRoom(Pageable pageable, Long id);
+    List<BookingDto> getAllByUserName(Pageable pageable, String userName);
     BookingDto create(BookingDto booking);
 }

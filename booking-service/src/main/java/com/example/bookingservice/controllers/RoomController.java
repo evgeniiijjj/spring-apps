@@ -1,9 +1,11 @@
 package com.example.bookingservice.controllers;
 
+import com.example.bookingservice.dtos.RoomCriteria;
 import com.example.bookingservice.dtos.RoomDto;
 import com.example.bookingservice.dtos.RoomDtoForCreateOrUpdate;
 import com.example.bookingservice.services.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,9 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,6 +28,11 @@ public class RoomController {
     @GetMapping("/api/rooms/room/{id}")
     public ResponseEntity<RoomDto> getRoomById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getById(id));
+    }
+
+    @PostMapping("/api/rooms")
+    public ResponseEntity<List<RoomDto>> getRoomsByCriteria(@RequestParam Integer pageNumber, @RequestParam Integer pageSize, @RequestBody RoomCriteria criteria) {
+        return ResponseEntity.ok(service.findAllByCriteria(PageRequest.of(pageNumber, pageSize), criteria));
     }
 
     @PostMapping("/api/rooms/room")

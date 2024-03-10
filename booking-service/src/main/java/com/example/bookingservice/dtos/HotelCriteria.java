@@ -45,6 +45,6 @@ public class HotelCriteria {
         if (value == null) {
             return null;
         }
-        return (hotel, cq, cb) -> cb.equal(hotel.get(name), value);
+        return (root, cq, cb) -> cb.equal(root.get(name), value);
     }
 }

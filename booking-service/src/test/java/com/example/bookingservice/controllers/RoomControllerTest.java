@@ -1,14 +1,19 @@
 package com.example.bookingservice.controllers;
 
 import com.example.bookingservice.AbstractTest;
+import com.example.bookingservice.dtos.HotelCriteria;
 import com.example.bookingservice.dtos.HotelDto;
+import com.example.bookingservice.dtos.HotelDtoWithRating;
+import com.example.bookingservice.dtos.RoomCriteria;
 import com.example.bookingservice.dtos.RoomDto;
 import com.example.bookingservice.dtos.RoomDtoForCreateOrUpdate;
 import com.example.bookingservice.repositories.RoomRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+import java.time.Instant;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -242,5 +247,51 @@ public class RoomControllerTest extends AbstractTest {
                                 .with(httpBasic("Bill", "bill"))
                 )
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void whenGetRoomsByCriteriaByUserWithAdminRole_thenReturnRoomList() throws Exception {
+
+        RoomCriteria criteria = new RoomCriteria("first_room", "nice room", null, null, null, null, null, null);
+
+        List<RoomDto> actualResult = objectMapper.readValue(
+                mockMvc
+                        .perform(
+                                post("/api/rooms?pageNumber=0&pageSize=10")
+                                        .with(httpBasic("John", "john"))
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(criteria))
+                        )
+                        .andExpect(status().isOk())
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(),
+                new TypeReference<>() {}
+        );
+
+        assertEquals(2, actualResult.size());
+    }
+
+    @Test
+    public void whenGetRoomsByCriteriaByUserWithNoAdminRole_thenReturnRoomList() throws Exception {
+
+        RoomCriteria criteria = new RoomCriteria(null, null, 630, 900, null, Instant.parse("2024-03-05T12:00:00Z"), Instant.parse("2024-04-03T12:00:00Z"), 1L);
+
+        List<RoomDto> actualResult = objectMapper.readValue(
+                mockMvc
+                        .perform(
+                                post("/api/rooms?pageNumber=0&pageSize=10")
+                                        .with(httpBasic("Alex", "alex"))
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(criteria))
+                        )
+                        .andExpect(status().isOk())
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(),
+                new TypeReference<>() {}
+        );
+
+        assertEquals(2, actualResult.size());
     }
 }

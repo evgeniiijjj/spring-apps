@@ -2,13 +2,17 @@ package com.example.bookingservice.controllers;
 
 
 import com.example.bookingservice.AbstractTest;
+import com.example.bookingservice.dtos.AllElementsResult;
 import com.example.bookingservice.dtos.UserDto;
 import com.example.bookingservice.dtos.UserDtoForCreate;
 import com.example.bookingservice.enums.RoleType;
 import com.example.bookingservice.repositories.UserRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
@@ -22,6 +26,37 @@ public class UserControllerTest extends AbstractTest {
 
     @Autowired
     private UserRepository repository;
+
+    @Test
+    public void whenGetUsersByUserWithRoleAdmin_thenReturnUsers() throws Exception {
+
+        List<UserDto> actualResult = objectMapper.readValue(
+                mockMvc
+                        .perform(
+                                get("/api/users?pageNumber=0&pageSize=10")
+                                        .with(httpBasic("John", "john"))
+                        )
+                        .andExpect(status().isOk())
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(),
+                new TypeReference<AllElementsResult<UserDto>>() {
+                }
+        ).getElements();
+
+        assertEquals(7, actualResult.size());
+    }
+
+    @Test
+    public void whenGetUsersByUserWithRoleNoAdmin_thenForbiddenStatus() throws Exception {
+
+        mockMvc
+                .perform(
+                        get("/api/users?pageNumber=0&pageSize=10")
+                                .with(httpBasic("Alex", "alex"))
+                )
+                .andExpect(status().isForbidden());
+    }
 
     @Test
     public void whenGetUserByNameByUserWithRoleAdmin_thenReturnUser() throws Exception {

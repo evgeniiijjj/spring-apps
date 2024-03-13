@@ -1,12 +1,10 @@
 package com.example.bookingservice.services;
 
+import com.example.bookingservice.dtos.AllElementsResult;
 import com.example.bookingservice.dtos.RoomCriteria;
 import com.example.bookingservice.dtos.RoomDto;
 import com.example.bookingservice.dtos.RoomDtoForCreateOrUpdate;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 public interface RoomService {
 
@@ -18,5 +16,5 @@ public interface RoomService {
 
     Long deleteById(Long id);
 
-    List<RoomDto> findAllByCriteria(Pageable pageable, RoomCriteria criteria);
+    AllElementsResult<RoomDto> findAllByCriteria(Pageable pageable, RoomCriteria criteria);
 }

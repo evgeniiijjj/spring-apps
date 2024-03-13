@@ -1,9 +1,11 @@
 package com.example.bookingservice.controllers;
 
+import com.example.bookingservice.dtos.AllElementsResult;
 import com.example.bookingservice.dtos.UserDto;
 import com.example.bookingservice.dtos.UserDtoForCreate;
 import com.example.bookingservice.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -20,6 +23,11 @@ import java.net.URI;
 public class UserController {
 
     private final UserService service;
+
+    @GetMapping("/api/users")
+    public ResponseEntity<AllElementsResult<UserDto>> getUsers(@RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
+        return ResponseEntity.ok(service.getAll(PageRequest.of(pageNumber, pageSize)));
+    }
 
     @GetMapping("/api/users/user/{name}")
     public ResponseEntity<UserDto> getUserByName(@PathVariable String name) {

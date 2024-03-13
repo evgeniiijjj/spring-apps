@@ -1,6 +1,7 @@
 package com.example.bookingservice.controllers;
 
 import com.example.bookingservice.AbstractTest;
+import com.example.bookingservice.dtos.AllElementsResult;
 import com.example.bookingservice.dtos.BookingDto;
 import com.example.bookingservice.dtos.HotelDto;
 import com.example.bookingservice.dtos.RoomDto;
@@ -40,8 +41,8 @@ public class BookingControllerTest extends AbstractTest {
                         .andReturn()
                         .getResponse()
                         .getContentAsString(),
-                    new TypeReference<>() {}
-        );
+                    new TypeReference<AllElementsResult<BookingDto>>() {}
+        ).getElements();
 
         assertEquals(9, actualResult.size());
     }
@@ -70,8 +71,8 @@ public class BookingControllerTest extends AbstractTest {
                         .andReturn()
                         .getResponse()
                         .getContentAsString(),
-                new TypeReference<>() {}
-        );
+                new TypeReference<AllElementsResult<BookingDto>>() {}
+        ).getElements();
 
         assertEquals(1, actualResult.size());
     }
@@ -186,8 +187,8 @@ public class BookingControllerTest extends AbstractTest {
                         .andReturn()
                         .getResponse()
                         .getContentAsString(),
-                new TypeReference<>() {}
-        );
+                new TypeReference<AllElementsResult<BookingDto>>() {}
+        ).getElements();
 
         assertEquals(2, actualResult.size());
     }
@@ -205,8 +206,8 @@ public class BookingControllerTest extends AbstractTest {
                         .andReturn()
                         .getResponse()
                         .getContentAsString(),
-                new TypeReference<>() {}
-        );
+                new TypeReference<AllElementsResult<BookingDto>>() {}
+        ).getElements();
 
         assertEquals(2, actualResult.size());
     }

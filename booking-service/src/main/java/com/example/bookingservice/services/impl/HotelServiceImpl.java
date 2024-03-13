@@ -1,5 +1,6 @@
 package com.example.bookingservice.services.impl;
 
+import com.example.bookingservice.dtos.AllElementsResult;
 import com.example.bookingservice.dtos.HotelCriteria;
 import com.example.bookingservice.dtos.HotelDto;
 import com.example.bookingservice.dtos.HotelDtoForChangeRating;
@@ -10,12 +11,12 @@ import com.example.bookingservice.mappers.HotelMapper;
 import com.example.bookingservice.repositories.HotelRepository;
 import com.example.bookingservice.services.HotelService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -25,8 +26,9 @@ public class HotelServiceImpl implements HotelService {
     private final HotelMapper mapper;
 
     @Override
-    public List<HotelDtoWithRating> getAll(Pageable page) {
-        return mapper.toDtoWithRatingList(repository.findAll(page).getContent());
+    public AllElementsResult<HotelDtoWithRating> getAll(Pageable pageable) {
+        Page<Hotel> result = repository.findAll(pageable);
+        return new AllElementsResult<>(result.getTotalElements(), mapper.toDtoWithRatingList(result.getContent()));
     }
 
     @Override
@@ -69,10 +71,9 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public List<HotelDtoWithRating> findAllByCriteria(Pageable pageable, HotelCriteria criteria) {
-        return mapper.toDtoWithRatingList(
-                repository.findAll(Specification.where(criteria.spec()), pageable).getContent()
-        );
+    public AllElementsResult<HotelDtoWithRating> findAllByCriteria(Pageable pageable, HotelCriteria criteria) {
+        Page<Hotel> result = repository.findAll(Specification.where(criteria.spec()), pageable);
+        return new AllElementsResult<>(result.getTotalElements(), mapper.toDtoWithRatingList(result.getContent()));
     }
 
     private void validateId(Long id) {

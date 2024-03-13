@@ -1,5 +1,6 @@
 package com.example.bookingservice.controllers;
 
+import com.example.bookingservice.dtos.AllElementsResult;
 import com.example.bookingservice.dtos.RoomCriteria;
 import com.example.bookingservice.dtos.RoomDto;
 import com.example.bookingservice.dtos.RoomDtoForCreateOrUpdate;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.util.List;
+import java.time.Instant;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,9 +31,25 @@ public class RoomController {
         return ResponseEntity.ok(service.getById(id));
     }
 
-    @PostMapping("/api/rooms")
-    public ResponseEntity<List<RoomDto>> getRoomsByCriteria(@RequestParam Integer pageNumber, @RequestParam Integer pageSize, @RequestBody RoomCriteria criteria) {
-        return ResponseEntity.ok(service.findAllByCriteria(PageRequest.of(pageNumber, pageSize), criteria));
+    @GetMapping("/api/rooms")
+    public ResponseEntity<AllElementsResult<RoomDto>> getRoomsByCriteria(@RequestParam Integer pageNumber,
+                                                                         @RequestParam Integer pageSize,
+                                                                         @RequestParam(required = false) String name,
+                                                                         @RequestParam(required = false) String description,
+                                                                         @RequestParam(required = false) Integer minPrice,
+                                                                         @RequestParam(required = false) Integer maxPrice,
+                                                                         @RequestParam(required = false) Integer capacity,
+                                                                         @RequestParam(required = false) Instant checkIn,
+                                                                         @RequestParam(required = false) Instant checkOut,
+                                                                         @RequestParam(required = false) Long hotelId) {
+        return ResponseEntity.ok(
+                service.findAllByCriteria(
+                        PageRequest.of(pageNumber, pageSize),
+                        new RoomCriteria(
+                            name, description, minPrice, maxPrice, capacity, checkIn, checkOut, hotelId
+                        )
+                )
+        );
     }
 
     @PostMapping("/api/rooms/room")

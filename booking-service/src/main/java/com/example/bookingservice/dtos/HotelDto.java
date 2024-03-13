@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 @Data
 public class HotelDto {
     private Long id;
-    @NotBlank(message = "Имя отеля должно быть указано!")
+    @NotBlank(message = "Hotel name must be specified!")
     private String name;
-    @NotBlank(message = "Заголовок объявления должен быть указан!")
+    @NotBlank(message = "Ad title must be specified!")
     private String adTitle;
-    @NotBlank(message = "Город - место положения отеля должен быть указан!")
+    @NotBlank(message = "City must be specified!")
     private String city;
-    @NotBlank(message = "Адрес расположения отеля должен быть указан!")
+    @NotBlank(message = "Address must be specified!")
     private String address;
-    @NotBlank(message = "Растояние до центра города должно быть указано!")
+    @NotBlank(message = "City center destination must be specified!")
     private Integer cityCenterDistance;
 }

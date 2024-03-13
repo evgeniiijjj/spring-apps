@@ -1,16 +1,14 @@
 package com.example.bookingservice.dtos;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.Instant;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class BookingDates {
     private Instant checkIn;
     private Instant checkOut;

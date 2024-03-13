@@ -43,15 +43,13 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain (HttpSecurity http, AuthenticationManager manager) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/api/users/**")
-                        .hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.GET, "/api/users", "/api/bookings", "/api/bookings/room/**")
+                        .hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/users/**")
                         .hasAnyRole("ADMIN", "USER")
                         .requestMatchers(HttpMethod.DELETE, "/api/users/**")
                         .hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.GET, "/api/rooms/**", "/api/hotels/**", "/api/bookings/**", "/api/users/user/**")
-                        .hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.POST, "/api/hotels", "/api/rooms")
+                        .requestMatchers(HttpMethod.GET, "/api/rooms", "/api/rooms/**", "/api/hotels", "/api/hotels/**", "/api/bookings/user/**", "/api/users/**")
                         .hasAnyRole("ADMIN", "USER")
                         .requestMatchers(HttpMethod.POST, "/api/rooms/**", "/api/hotels/**")
                         .hasAnyRole("ADMIN")
@@ -64,6 +62,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/bookings/**")
                         .hasAnyRole("ADMIN", "USER")
                         .requestMatchers(HttpMethod.GET, "/api/bookings")
+                        .hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/stat")
                         .hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/users/user")
                         .permitAll().anyRequest().authenticated()

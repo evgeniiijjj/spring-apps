@@ -13,16 +13,16 @@ import lombok.Setter;
 @Setter
 public class RoomDtoForCreateOrUpdate {
     private Long id;
-    @NotBlank(message = "Имя комнаты должно быть указано!")
+    @NotBlank(message = "Room name must be specified!")
     private String name;
-    @NotBlank(message = "Описание комнаты должно быть указано!")
+    @NotBlank(message = "Room description must be specified!")
     private String description;
-    @NotBlank(message = "Номер комнаты должен быть указан!")
+    @NotBlank(message = "Room number must be specified!")
     private Integer number;
-    @NotBlank(message = "Цена комнаты должна быть указана!")
+    @NotBlank(message = "Room price must be specified!")
     private Integer price;
-    @NotBlank(message = "Вместимость комнаты должна быть указана!")
+    @NotBlank(message = "Room capacity must be specified!")
     private Integer capacity;
-    @NotNull(message = "Отель должен быть указан!")
+    @NotNull(message = "Hotel must be specified!")
     private HotelDto hotel;
 }

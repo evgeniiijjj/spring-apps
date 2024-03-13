@@ -1,5 +1,6 @@
 package com.example.bookingservice.controllers;
 
+import com.example.bookingservice.dtos.AllElementsResult;
 import com.example.bookingservice.dtos.BookingDto;
 import com.example.bookingservice.services.BookingService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,20 +22,20 @@ public class BookingController {
     private final BookingService service;
 
     @GetMapping("/api/bookings")
-    public ResponseEntity<List<BookingDto>> getAll(@RequestParam Integer pageNumber,
+    public ResponseEntity<AllElementsResult<BookingDto>> getAll(@RequestParam Integer pageNumber,
                                                                 @RequestParam Integer pageSize) {
         return ResponseEntity.ok(service.getAll(PageRequest.of(pageNumber, pageSize)));
     }
 
     @GetMapping("/api/bookings/room/{roomId}")
-    public ResponseEntity<List<BookingDto>> getAllByRoomId(@RequestParam Integer pageNumber,
+    public ResponseEntity<AllElementsResult<BookingDto>> getAllByRoomId(@RequestParam Integer pageNumber,
                                                                 @RequestParam Integer pageSize,
                                                                 @PathVariable Long roomId) {
         return ResponseEntity.ok(service.getAllByRoom(PageRequest.of(pageNumber, pageSize), roomId));
     }
 
     @GetMapping("/api/bookings/user/{userName}")
-    public ResponseEntity<List<BookingDto>> getAllByUserName(@RequestParam Integer pageNumber,
+    public ResponseEntity<AllElementsResult<BookingDto>> getAllByUserName(@RequestParam Integer pageNumber,
                                                            @RequestParam Integer pageSize,
                                                            @PathVariable String userName) {
         return ResponseEntity.ok(service.getAllByUserName(PageRequest.of(pageNumber, pageSize), userName));

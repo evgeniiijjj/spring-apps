@@ -28,7 +28,7 @@ public class VerifyUserAspect {
             throw new AccessDeniedException(
                     MessageFormat
                             .format(
-                                    "User {0} does not have rights to view or delete another account!",
+                                    "UserStat {0} does not have rights to view or delete another account!",
                                     detailsService.getUserDetails().getUsername()
                             )
             );
@@ -44,7 +44,7 @@ public class VerifyUserAspect {
             throw new AccessDeniedException(
                     MessageFormat
                             .format(
-                                    "User {0} does not have rights to update another account!",
+                                    "UserStat {0} does not have rights to update another account!",
                                     detailsService.getUserDetails().getUsername()
                             )
             );
@@ -60,7 +60,7 @@ public class VerifyUserAspect {
             throw new AccessDeniedException(
                     MessageFormat
                             .format(
-                                    "User {0} does not have rights to get bookings another user!",
+                                    "UserStat {0} does not have rights to get bookings another user!",
                                     detailsService.getUserDetails().getUsername()
                             )
             );

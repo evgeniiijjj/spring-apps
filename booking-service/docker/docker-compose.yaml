@@ -9,6 +9,18 @@ services:
       POSTGRES_PASSWORD: booking-service
     ports:
       - 5432:5432
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  mongodb:
+    image: mongo:7.0.0-rc2
+    container_name: booking_stat_service_db
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: booking-service
+      MONGO_INITDB_DATABASE: booking-stat-db
 
   booking:
     image: openjdk:21
@@ -24,3 +36,23 @@ services:
     command: /usr/java/openjdk-21/bin/java -jar /app/app.jar
     depends_on:
       - database
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:3.3.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka:
+    image: confluentinc/cp-kafka:3.3.0
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO, kafka.producer.async.DefaultEventHandler=INFO, state.change.logger=INFO"
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://$DOCKERHOST:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPIC_ENABLE: 'true'

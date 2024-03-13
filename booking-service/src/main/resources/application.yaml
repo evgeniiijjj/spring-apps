@@ -1,4 +1,7 @@
 spring:
+  data:
+    mongodb:
+      uri: mongodb://root:booking-service@host.docker.internal:27017/booking-stat-db?authSource=admin
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://host.docker.internal:5432/postgres
@@ -7,3 +10,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  kafka:
+    bootstrap-servers: localhost:9092
+
+app:
+  kafka:
+    registrationTopic: "registration-topic"
+    bookingTopic: "booking-topic"
+    kafkaMessageGroupId: "kafka-message-group-id"

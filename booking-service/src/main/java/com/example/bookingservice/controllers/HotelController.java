@@ -1,5 +1,6 @@
 package com.example.bookingservice.controllers;
 
+import com.example.bookingservice.dtos.AllElementsResult;
 import com.example.bookingservice.dtos.HotelCriteria;
 import com.example.bookingservice.dtos.HotelDto;
 import com.example.bookingservice.dtos.HotelDtoForChangeRating;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -27,15 +27,21 @@ public class HotelController {
     private final HotelService service;
 
     @GetMapping("/api/hotels")
-    public ResponseEntity<List<HotelDtoWithRating>> getHotels(@RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
-        return ResponseEntity.ok(service.getAll(PageRequest.of(pageNumber, pageSize)));
-    }
-
-    @PostMapping("/api/hotels")
-    public ResponseEntity<List<HotelDtoWithRating>> getHotelsByCriteria(@RequestParam Integer pageNumber,
-                                                                  @RequestParam Integer pageSize,
-                                                                  @RequestBody HotelCriteria criteria) {
-        return ResponseEntity.ok(service.findAllByCriteria(PageRequest.of(pageNumber, pageSize), criteria));
+    public ResponseEntity<AllElementsResult<HotelDtoWithRating>> getHotelsByCriteria(@RequestParam Integer pageNumber,
+                                                                                     @RequestParam Integer pageSize,
+                                                                                     @RequestParam(required = false) String name,
+                                                                                     @RequestParam(required = false) String adTitle,
+                                                                                     @RequestParam(required = false) String city,
+                                                                                     @RequestParam(required = false) String address,
+                                                                                     @RequestParam(required = false) Integer cityCenterDistance,
+                                                                                     @RequestParam(required = false) Float rating,
+                                                                                     @RequestParam(required = false) Integer numberOfRatings) {
+        return ResponseEntity.ok(
+                service.findAllByCriteria(
+                        PageRequest.of(pageNumber, pageSize),
+                        new HotelCriteria(name, adTitle, city, address, cityCenterDistance, rating, numberOfRatings)
+                )
+        );
     }
 
     @GetMapping("/api/hotels/hotel/{id}")

@@ -35,7 +35,7 @@ public class RoomCriteria {
         return getSpecification(this);
     }
 
-    public static Specification<Room> getSpecification(RoomCriteria criteria) {
+    public Specification<Room> getSpecification(RoomCriteria criteria) {
         Map<String, Object> fields = new HashMap<>();
         Arrays.stream(RoomCriteria.class.getDeclaredFields()).forEach(field -> {
             try {

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
@@ -18,6 +19,7 @@ import java.util.List;
 public class RestResponseEntityExceptionHandler {
 
     @ExceptionHandler({ NotFoundException.class })
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<Object> handleNotFoundException(
             Exception ex, WebRequest request) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -25,13 +27,23 @@ public class RestResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({ AccessDeniedException.class })
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     public ResponseEntity<Object> handleAccessDeniedException(
             Exception ex, WebRequest request) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(ex.getMessage());
     }
 
-    @ExceptionHandler({ MethodArgumentNotValidException.class, UserAlreadyExistsException.class })
+    @ExceptionHandler({ UserAlreadyExistsException.class })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> handleUserAlreadyExistsException(
+            Exception ex, WebRequest request) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler({ MethodArgumentNotValidException.class })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Object> handleNotValidException(
             MethodArgumentNotValidException ex, WebRequest request) {
         BindingResult bindingResult = ex.getBindingResult();

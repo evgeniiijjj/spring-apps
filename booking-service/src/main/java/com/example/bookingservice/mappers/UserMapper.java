@@ -18,5 +18,5 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "bookings", ignore = true)
     User toEntityForCreate(UserDtoForCreate user);
-    List<UserDto> toDtoList(List<User> rooms);
+    List<UserDto> toDtoList(List<User> users);
 }

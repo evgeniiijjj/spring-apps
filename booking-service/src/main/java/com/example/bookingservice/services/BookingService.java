@@ -1,13 +1,12 @@
 package com.example.bookingservice.services;
 
+import com.example.bookingservice.dtos.AllElementsResult;
 import com.example.bookingservice.dtos.BookingDto;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 public interface BookingService {
-    List<BookingDto> getAll(Pageable pageable);
-    List<BookingDto> getAllByRoom(Pageable pageable, Long id);
-    List<BookingDto> getAllByUserName(Pageable pageable, String userName);
+    AllElementsResult<BookingDto> getAll(Pageable pageable);
+    AllElementsResult<BookingDto> getAllByRoom(Pageable pageable, Long id);
+    AllElementsResult<BookingDto> getAllByUserName(Pageable pageable, String userName);
     BookingDto create(BookingDto booking);
 }

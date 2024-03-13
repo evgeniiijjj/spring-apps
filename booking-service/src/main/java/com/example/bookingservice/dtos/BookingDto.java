@@ -14,12 +14,12 @@ import java.time.Instant;
 @Setter
 public class BookingDto {
     private Long id;
-    @NotNull(message = "Комната должна быть указана!")
+    @NotNull(message = "Room must be specified!")
     private RoomDto room;
-    @NotNull(message = "Комната должна быть указана!")
+    @NotNull(message = "User must be specified!")
     private UserDto user;
-    @NotNull(message = "Дата и время бронирования должны быть указаны!")
+    @NotNull(message = "Check in date and time must be specified!")
     private Instant checkIn;
-    @NotNull(message = "Дата и время окончания бронирования должны быть указаны!")
+    @NotNull(message = "Check out date and time must be specified!")
     private Instant checkOut;
 }

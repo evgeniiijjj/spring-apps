@@ -28,7 +28,7 @@ services:
     links:
       - database
     volumes:
-      - ../build/libs/booking-service-0.0.1-SNAPSHOT.jar:/app/app.jar
+      - ../target/booking-service-0.0.1-SNAPSHOT.jar:/app/app.jar
     extra_hosts:
       - host.docker.internal:host-gateway
     ports:

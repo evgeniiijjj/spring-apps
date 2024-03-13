@@ -1,7 +1,7 @@
 package com.example.bookingservice.security;
 
 
-import com.example.bookingservice.entities.User;
+import com.example.bookingservice.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

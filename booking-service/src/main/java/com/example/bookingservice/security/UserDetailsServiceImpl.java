@@ -1,6 +1,6 @@
 package com.example.bookingservice.security;
 
-import com.example.bookingservice.services.UserService;
+import com.example.bookingservice.service.UserService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

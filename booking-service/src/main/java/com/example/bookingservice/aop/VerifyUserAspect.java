@@ -1,7 +1,7 @@
 package com.example.bookingservice.aop;
 
-import com.example.bookingservice.dtos.UserDto;
-import com.example.bookingservice.exceptions.AccessDeniedException;
+import com.example.bookingservice.dto.UserDto;
+import com.example.bookingservice.exception.AccessDeniedException;
 import com.example.bookingservice.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
